@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string-array name="skill_levels_array">
+        <item>@string/skill_beginner</item>
+        <item>@string/skill_advanced</item>
+    </string-array>
+</resources>

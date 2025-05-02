@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/ivCoverImg"
+        android:title="@string/toolbar_item_name_cover"
+        android:icon="@drawable/profile_icon"/>
+
+    <item android:id="@+id/ivCreateCoverImg"
+        android:title="@string/toolbar_item_name_create_cover"
+        android:icon="@drawable/profile_icon"/>
+
+    <item android:id="@+id/ivInstrumentImg"
+        android:title="@string/toolbar_item_name_instrument"
+        android:icon="@drawable/profile_icon"/>
+
+    <item android:id="@+id/ivProfileImg"
+        android:title="@string/toolbar_item_name_profile"
+        android:icon="@drawable/profile_icon"/>
+</menu>

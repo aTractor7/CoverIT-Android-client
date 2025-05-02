@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_register"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="@color/base_color">
+
+    <TextView
+        android:id="@+id/tvRegisterTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/register_title"
+        android:textColor="@color/darker3_color"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp" />
+
+    <EditText
+        android:id="@+id/etUsername"
+        android:layout_width="0dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="64dp"
+        android:hint="@string/register_username_hint"
+        android:inputType="text"
+        android:textColorHint="@color/darker1_color"
+        android:textColor="@color/darker2_color"
+        app:layout_constraintTop_toBottomOf="@id/tvRegisterTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="0dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="24dp"
+        android:hint="@string/register_email_hint"
+        android:inputType="textEmailAddress"
+        android:textColorHint="@color/darker1_color"
+        android:textColor="@color/darker2_color"
+        app:layout_constraintTop_toBottomOf="@id/etUsername"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="0dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="24dp"
+        android:hint="@string/register_password_hint"
+        android:inputType="textPassword"
+        android:textColorHint="@color/darker1_color"
+        android:textColor="@color/darker2_color"
+        app:layout_constraintTop_toBottomOf="@id/etEmail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tvSkillLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/register_skill_label"
+        android:textColor="@color/darker1_color"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etPassword"
+        android:layout_marginTop="36dp"/>
+
+    <Spinner
+        android:id="@+id/spinnerSkill"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/darker2_color"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSkillLabel"/>
+
+    <EditText
+        android:id="@+id/etInstrument"
+        android:layout_width="0dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="24dp"
+        android:hint="@string/register_instrument_hint"
+        android:inputType="text"
+        android:textColorHint="@color/darker1_color"
+        android:textColor="@color/darker2_color"
+        app:layout_constraintTop_toBottomOf="@id/spinnerSkill"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:id="@+id/etBio"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="24dp"
+        android:hint="@string/register_bio_hint"
+        android:inputType="textMultiLine"
+        android:gravity="top"
+        android:textColorHint="@color/darker1_color"
+        android:textColor="@color/darker2_color"
+        app:layout_constraintTop_toBottomOf="@id/etInstrument"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnRegister"
+        android:layout_width="322dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/register_button"
+        android:backgroundTint="@color/darker2_color"
+        android:textColor="@color/darkest_color"
+        android:textSize="20sp"
+        app:cornerRadius="8dp"
+        app:layout_constraintTop_toBottomOf="@id/etBio"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

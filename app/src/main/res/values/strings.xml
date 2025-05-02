@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">CoverIT</string>
+    <string name="login_username_hint">Username</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_create_account">Create</string>
+    <string name="login_log_in">Log In</string>
+    <string name="login_logo_img_description">logo</string>
+
+    <string name="register_title">Sign Up</string>
+    <string name="register_username_hint">Username</string>
+    <string name="register_email_hint">Email</string>
+    <string name="register_password_hint">Password</string>
+    <string name="register_skill_label">Select your skill</string>
+    <string name="register_instrument_hint">Instrument</string>
+    <string name="register_bio_hint">Short Bio</string>
+    <string name="register_button">Create Account</string>
+    <string name="skill_beginner">Beginner</string>
+    <string name="skill_advanced">Advanced</string>
+
+    <string name="profile_label">My Profile</string>
+    <string name="profile_img_description">Profile Image</string>
+    <string name="profile_username_label">Username</string>
+    <string name="profile_email_label">Email</string>
+    <string name="profile_role_label">Role</string>
+    <string name="profile_skill_label">Skill</string>
+    <string name="profile_instrument_label">Instrument</string>
+    <string name="profile_bio_label">BIO</string>
+    <string name="profile_join_since">Join since</string>
+    <string name="profile_edit">Edit profile</string>
+
+    <string name="tutorial_description_label">Description: </string>
+    <string name="tutorial_strumming_label">Recommended strumming: </string>
+    <string name="tutorial_author_label">CreatedBy: </string>
+    <string name="tutorial_created_at_label">at: </string>
+    <string name="tutorial_label">Tutorial: </string>
+
+    <string name="toolbar_item_name_cover">Cover</string>
+    <string name="toolbar_item_name_create_cover">Add Cover</string>
+    <string name="toolbar_item_name_profile">Profile</string>
+    <string name="toolbar_item_name_instrument">Instrument</string>
+</resources>
