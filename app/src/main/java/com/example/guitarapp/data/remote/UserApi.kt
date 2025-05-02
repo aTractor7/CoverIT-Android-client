@@ -12,6 +12,7 @@ interface UserApi {
         @Path("id") userId: Int,
     ): Response<UserDto>
 
+
     @GET("users/authenticated")
     suspend fun getAuthenticatedUser(
     ): Response<UserDto>

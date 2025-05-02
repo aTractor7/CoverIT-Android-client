@@ -28,6 +28,18 @@ class ProfileFragment : Fragment() {
             }
         }
     }
+    companion object {
+        private const val ARG_USER_ID = "userId"
+
+        fun newInstance(userId: Int = -1): ProfileFragment {
+            val fragment = ProfileFragment()
+            val args = Bundle().apply {
+                putInt(ARG_USER_ID, userId)
+            }
+            fragment.arguments = args
+            return fragment
+        }
+    }
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
@@ -40,7 +52,13 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.fetchAuthenticatedUserProfile()
+        val userId = arguments?.getInt(ARG_USER_ID, -1) ?: -1
+
+        if (userId != -1) {
+            viewModel.fetchUserProfile(userId)
+        } else {
+            viewModel.fetchAuthenticatedUserProfile()
+        }
 
         lifecycleScope.launchWhenStarted {
             viewModel.profileState.collectLatest { state ->

@@ -17,7 +17,7 @@
     <string name="skill_beginner">Beginner</string>
     <string name="skill_advanced">Advanced</string>
 
-    <string name="profile_label">My Profile</string>
+    <string name="profile_label">Profile</string>
     <string name="profile_img_description">Profile Image</string>
     <string name="profile_username_label">Username</string>
     <string name="profile_email_label">Email</string>

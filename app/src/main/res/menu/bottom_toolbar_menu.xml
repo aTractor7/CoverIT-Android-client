@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/ivCoverImg"
+    <item android:id="@+id/tutorialFragment"
         android:title="@string/toolbar_item_name_cover"
         android:icon="@drawable/profile_icon"/>
 
-    <item android:id="@+id/ivCreateCoverImg"
+    <item android:id="@+id/createTutorialFragment"
         android:title="@string/toolbar_item_name_create_cover"
         android:icon="@drawable/profile_icon"/>
 
-    <item android:id="@+id/ivInstrumentImg"
+    <item android:id="@+id/instrumentFragment"
         android:title="@string/toolbar_item_name_instrument"
         android:icon="@drawable/profile_icon"/>
 
-    <item android:id="@+id/ivProfileImg"
+    <item android:id="@+id/profileFragment"
         android:title="@string/toolbar_item_name_profile"
         android:icon="@drawable/profile_icon"/>
 </menu>

@@ -23,10 +23,10 @@ import com.google.android.flexbox.FlexboxLayout
 import com.google.android.flexbox.JustifyContent
 import kotlinx.coroutines.flow.collectLatest
 import kotlin.getValue
-import androidx.core.graphics.toColorInt
 import androidx.navigation.fragment.findNavController
 import com.example.guitarapp.R
 import com.example.guitarapp.data.model.SongBeat
+import com.example.guitarapp.data.model.SongTutorial
 
 class TutorialFragment : Fragment(){
     private val viewModel: TutorialViewModel by viewModels {
@@ -38,6 +38,8 @@ class TutorialFragment : Fragment(){
     }
     private var _binding: FragmentTutorialBinding? = null
     private val binding get() = _binding!!
+
+    private var currentTutorial: SongTutorial? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,7 +53,16 @@ class TutorialFragment : Fragment(){
         viewModel.fetchSongTutorial(9)
 
         binding.tvTutorialAuthor.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+            currentTutorial?.tutorialAuthor?.id?.let { authorId ->
+                val args = Bundle().apply {
+                    putInt("userId", authorId)
+                }
+
+                findNavController().navigate(
+                    R.id.action_tutorialFragment_to_profileFragment,
+                    args
+                )
+            }
         }
 
         lifecycleScope.launchWhenStarted {
@@ -62,6 +73,7 @@ class TutorialFragment : Fragment(){
                     }
                     is Resource.Success -> {
                         val tutorial = state.data
+                        currentTutorial = tutorial
 
                         binding.tvSongTitle.text = tutorial.song.title
                         if (tutorial.description != null) {
@@ -75,11 +87,9 @@ class TutorialFragment : Fragment(){
                         binding.tvTutorialAuthor.text = tutorial.tutorialAuthor.username
                         binding.tvTutorialCreatedAt.text = tutorial.createdAt.toString()
 
+
+                        binding.llBeatsContainer.removeAllViews()
                         val sortedBeats = tutorial.beats.sortedBy { it.beat }
-
-
-//                        binding.rvBeats.layoutManager = LinearLayoutManager(requireContext())
-//                        binding.rvBeats.adapter = SongBeatAdapter(sortedBeats)
 
                         val groupedBeats = groupBeatsByNewline(sortedBeats)
 
