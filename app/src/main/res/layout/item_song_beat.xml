@@ -1,0 +1,24 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:flexbox="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:minWidth="60dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/rootLayout">
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/flexChords"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        flexbox:flexWrap="wrap"
+        flexbox:justifyContent="flex_start"
+        android:layout_marginBottom="4dp"/>
+
+    <TextView
+        android:id="@+id/tvText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:padding="4dp"/>
+</LinearLayout>

@@ -1,15 +1,11 @@
 package com.example.guitarapp.presentation.ui.tutorial
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -18,9 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.guitarapp.MainActivity
 import com.example.guitarapp.databinding.FragmentTutorialBinding
 import com.example.guitarapp.utils.Resource
-import com.google.android.flexbox.FlexWrap
-import com.google.android.flexbox.FlexboxLayout
-import com.google.android.flexbox.JustifyContent
 import kotlinx.coroutines.flow.collectLatest
 import kotlin.getValue
 import androidx.navigation.fragment.findNavController
@@ -28,12 +21,25 @@ import com.example.guitarapp.R
 import com.example.guitarapp.data.model.SongBeat
 import com.example.guitarapp.data.model.SongTutorial
 
+
 class TutorialFragment : Fragment(){
     private val viewModel: TutorialViewModel by viewModels {
         object : ViewModelProvider.Factory {
             override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
                 return TutorialViewModel(requireActivity().application) as T
             }
+        }
+    }
+    companion object {
+        private const val ARG_TUTORIAL_ID = "tutorialId"
+
+        fun newInstance(userId: Int = -1): TutorialFragment {
+            val fragment = TutorialFragment()
+            val args = Bundle().apply {
+                putInt(ARG_TUTORIAL_ID, userId)
+            }
+            fragment.arguments = args
+            return fragment
         }
     }
     private var _binding: FragmentTutorialBinding? = null
@@ -50,132 +56,112 @@ class TutorialFragment : Fragment(){
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.fetchSongTutorial(9)
+        val tutorialId = arguments?.getInt(ARG_TUTORIAL_ID, -1) ?: -1
+        if (!handleInvalidTutorialId(tutorialId)) return
 
+        setupAuthorClickListener()
+        observeTutorialState()
+        viewModel.fetchSongTutorial(tutorialId)
+    }
+
+    private fun handleInvalidTutorialId(tutorialId: Int): Boolean {
+        if (tutorialId == -1) {
+            Toast.makeText(requireContext(), "Tutorial not found", Toast.LENGTH_SHORT).show()
+            findNavController().popBackStack()
+            return false
+        }
+        return true
+    }
+
+    private fun setupAuthorClickListener() {
         binding.tvTutorialAuthor.setOnClickListener {
             currentTutorial?.tutorialAuthor?.id?.let { authorId ->
                 val args = Bundle().apply {
                     putInt("userId", authorId)
                 }
-
                 findNavController().navigate(
                     R.id.action_tutorialFragment_to_profileFragment,
                     args
                 )
             }
         }
+    }
 
+    private fun observeTutorialState() {
         lifecycleScope.launchWhenStarted {
-            viewModel.profileState.collectLatest { state ->
+            viewModel.tutorialState.collectLatest { state ->
                 when (state) {
                     is Resource.Loading -> {
-                        // Показати лоадер
+                        // Показати лоадер (можна винести окремо за бажанням)
                     }
-                    is Resource.Success -> {
-                        val tutorial = state.data
-                        currentTutorial = tutorial
-
-                        binding.tvSongTitle.text = tutorial.song.title
-                        if (tutorial.description != null) {
-                            binding.tvTutorialDescription.text = tutorial.description
-                            binding.tvTutorialDescriptionLabel.visibility = View.VISIBLE
-                        }
-                        if (tutorial.recommendedStrumming != null) {
-                            binding.tvTutorialStrumming.text = tutorial.recommendedStrumming
-                            binding.tvTutorialStrummingLabel.visibility = View.VISIBLE
-                        }
-                        binding.tvTutorialAuthor.text = tutorial.tutorialAuthor.username
-                        binding.tvTutorialCreatedAt.text = tutorial.createdAt.toString()
-
-
-                        binding.llBeatsContainer.removeAllViews()
-                        val sortedBeats = tutorial.beats.sortedBy { it.beat }
-
-                        val groupedBeats = groupBeatsByNewline(sortedBeats)
-
-                        groupedBeats.forEach { beatGroup ->
-
-                            // Контейнер для одного рядка (одного підсписку бітів)
-                            val rowLayout = LinearLayout(requireContext()).apply {
-                                orientation = LinearLayout.HORIZONTAL
-                                setPadding(0, 16, 0, 16)
-                                layoutParams = LinearLayout.LayoutParams(
-                                    LinearLayout.LayoutParams.MATCH_PARENT,
-                                    LinearLayout.LayoutParams.WRAP_CONTENT
-                                )
-                            }
-
-                            // Ітеруємо біти в середині підсписку
-                            beatGroup.forEach { beat ->
-                                val beatLayout = LinearLayout(requireContext()).apply {
-                                    orientation = LinearLayout.VERTICAL
-                                    setPadding(5, 0, 0, 0) // відступи між бітами
-                                }
-
-                                // Контейнер для акордів
-                                val chordsRow = FlexboxLayout(requireContext()).apply {
-                                    flexWrap = FlexWrap.WRAP
-                                    justifyContent = JustifyContent.FLEX_START
-                                }
-
-                                beat.beatChords.forEach { beatChord ->
-                                    val chordView = TextView(requireContext()).apply {
-                                        text = beatChord.chord.name
-                                        textSize = 14f
-                                        setTextColor(ContextCompat.getColor(context, R.color.darkest_color))
-                                        background = ContextCompat.getDrawable(context, R.drawable.chord_background)
-                                        setPadding(8, 8, 8, 8)
-
-                                        // Додаємо маржін для відступу між акордами
-                                        layoutParams = FlexboxLayout.LayoutParams(
-                                            FlexboxLayout.LayoutParams.WRAP_CONTENT,
-                                            FlexboxLayout.LayoutParams.WRAP_CONTENT
-                                        ).apply {
-                                            setMargins(0, 0, 16, 8)
-                                        }
-                                    }
-
-                                    chordsRow.addView(chordView)
-                                }
-
-                                val textView = TextView(requireContext()).apply {
-                                    text = beat.text
-                                    setTextColor(ContextCompat.getColor(context, R.color.darker3_color))
-                                    textSize = 16f
-                                    setPadding(4, 4, 4, 4)
-                                }
-
-                                beatLayout.addView(chordsRow)
-                                beatLayout.addView(textView)
-
-                                // Додаємо блок біта в горизонтальний рядок
-                                rowLayout.addView(beatLayout)
-                            }
-
-                            // Додаємо рядок у головний контейнер
-                            binding.llBeatsContainer.addView(rowLayout)
-                        }
-                    }
-                    is Resource.NotAuthenticated -> {
-                        startLoginActivity()
-                        Toast.makeText(requireContext(),"Your session has expired.", Toast.LENGTH_LONG).show()
-                    }
-                    is Resource.Error -> {
-                        Toast.makeText(requireContext(), state.message ?: "Error", Toast.LENGTH_SHORT).show()
-                    }
+                    is Resource.Success -> handleTutorialLoaded(state.data)
+                    is Resource.NotAuthenticated -> handleAuthenticationError()
+                    is Resource.Error -> showError(state.message)
                     else -> {}
                 }
             }
         }
     }
 
+    private fun handleTutorialLoaded(tutorial: SongTutorial) {
+        currentTutorial = tutorial
+        binding.tvSongTitle.text = tutorial.song.title
+
+        tutorial.description?.let {
+            binding.tvTutorialDescription.text = it
+            binding.tvTutorialDescriptionLabel.visibility = View.VISIBLE
+        }
+
+        tutorial.recommendedStrumming?.let {
+            binding.tvTutorialStrumming.text = it
+            binding.tvTutorialStrummingLabel.visibility = View.VISIBLE
+        }
+
+        binding.tvTutorialAuthor.text = tutorial.tutorialAuthor.username
+        binding.tvTutorialCreatedAt.text = tutorial.createdAt.toString()
+
+        val groupedBeats = groupBeatsByNewline(tutorial.beats.sortedBy { it.beat })
+        val adapter = BeatGroupAdapter(groupedBeats)
+        binding.rvBeatsContainer.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvBeatsContainer.adapter = adapter
+    }
+
+    private fun handleAuthenticationError() {
+        startLoginActivity()
+        Toast.makeText(requireContext(), "Your session has expired.", Toast.LENGTH_LONG).show()
+    }
+
+    private fun showError(message: String?) {
+        Toast.makeText(requireContext(), message ?: "Error", Toast.LENGTH_SHORT).show()
+    }
+
+
     private fun groupBeatsByNewline(sortedBeats: List<SongBeat>): List<List<SongBeat>> {
         val result = mutableListOf<List<SongBeat>>()
         val currentGroup = mutableListOf<SongBeat>()
 
-        for (beat in sortedBeats) {
-            currentGroup.add(beat)
-            if (beat.text.endsWith("\n")) {
+        var nextBeat: SongBeat? = null
+        for (i in sortedBeats.indices) {
+            var beat = sortedBeats[i]
+
+            if (nextBeat != null) {
+                beat = nextBeat
+                nextBeat = null
+            }
+
+            val isLast = i == sortedBeats.lastIndex
+
+            if (beat.text != "" && !beat.text.endsWith(" ") && !beat.text.endsWith("\n") && !isLast) {
+                val updatedBeat = beat.copy(text = beat.text + "-")
+                val nextOriginal = sortedBeats[i + 1]
+                nextBeat = nextOriginal.copy(text = "-" + nextOriginal.text)
+
+                currentGroup.add(updatedBeat)
+            } else {
+                currentGroup.add(beat)
+            }
+
+            if (beat.text.endsWith("\n") || currentGroup.sumOf { it.text.length } > 40) {
                 result.add(currentGroup.toList())
                 currentGroup.clear()
             }

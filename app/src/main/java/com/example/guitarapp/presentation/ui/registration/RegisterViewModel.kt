@@ -9,6 +9,8 @@ import com.example.guitarapp.utils.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.io.IOException
+import java.net.SocketTimeoutException
 
 class RegisterViewModel : ViewModel() {
 
@@ -35,8 +37,12 @@ class RegisterViewModel : ViewModel() {
                 } else {
                     _registerState.value = Resource.Error("Registration failed: ${response.errorBody()?.string()}")
                 }
+            } catch (e: SocketTimeoutException) {
+                _registerState.value = Resource.Error("Connection timeout")
+            } catch (e: IOException) {
+                _registerState.value = Resource.Error("Network unavailable")
             } catch (e: Exception) {
-                _registerState.value = Resource.Error("An error occurred: ${e.localizedMessage}")
+                _registerState.value = Resource.Error("Error: ${e.localizedMessage}")
             }
         }
     }

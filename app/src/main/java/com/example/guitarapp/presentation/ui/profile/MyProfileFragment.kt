@@ -11,17 +11,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.example.guitarapp.MainActivity
 import com.example.guitarapp.data.model.UserDto
 import com.example.guitarapp.databinding.FragmentProfileBinding
-import com.example.guitarapp.presentation.ui.BaseActivity
 import com.example.guitarapp.utils.Resource
-import com.example.guitarapp.utils.SessionManager
 import kotlinx.coroutines.flow.collectLatest
+import kotlin.getValue
 
-class ProfileFragment : Fragment() {
-
+class MyProfileFragment: Fragment() {
     private val viewModel: ProfileViewModel by viewModels {
         object : ViewModelProvider.Factory {
             override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
@@ -29,18 +26,7 @@ class ProfileFragment : Fragment() {
             }
         }
     }
-    companion object {
-        private const val ARG_USER_ID = "userId"
 
-        fun newInstance(userId: Int = -1): ProfileFragment {
-            val fragment = ProfileFragment()
-            val args = Bundle().apply {
-                putInt(ARG_USER_ID, userId)
-            }
-            fragment.arguments = args
-            return fragment
-        }
-    }
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
@@ -53,11 +39,9 @@ class ProfileFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val userId = arguments?.getInt(ARG_USER_ID, -1) ?: -1
+        viewModel.fetchAuthenticatedUserProfile()
 
-        if (!handleInvalidUserId(userId)) return
 
-        viewModel.fetchUserProfile(userId)
         lifecycleScope.launchWhenStarted {
             viewModel.profileState.collectLatest { state ->
                 when (state) {
@@ -82,15 +66,6 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun handleInvalidUserId(tutorialId: Int): Boolean {
-        if (tutorialId == -1) {
-            Toast.makeText(requireContext(), "User not found", Toast.LENGTH_SHORT).show()
-            findNavController().popBackStack()
-            return false
-        }
-        return true
-    }
-
     private fun showUserData(user: UserDto) {
         binding.tvUsername.text = user.username
         binding.tvEmail.text = user.email
@@ -104,6 +79,9 @@ class ProfileFragment : Fragment() {
             val bmp = BitmapFactory.decodeByteArray(imgBytes, 0, imgBytes.size)
             binding.ivProfileImg.setImageBitmap(bmp)
         }
+
+        binding.tvEditProfile.isClickable = true
+        binding.tvEditProfile.visibility = View.VISIBLE
     }
 
     private fun startLoginActivity(){
@@ -116,4 +94,5 @@ class ProfileFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

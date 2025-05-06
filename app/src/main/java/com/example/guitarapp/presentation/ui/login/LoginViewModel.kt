@@ -11,6 +11,8 @@ import com.example.guitarapp.utils.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.io.IOException
+import java.net.SocketTimeoutException
 
 class LoginViewModel : ViewModel() {
 
@@ -36,8 +38,12 @@ class LoginViewModel : ViewModel() {
                 } else {
                     _loginState.value = Resource.Error("Login failed: ${response.message()}")
                 }
+            } catch (e: SocketTimeoutException) {
+                _loginState.value = Resource.Error("Connection timeout")
+            } catch (e: IOException) {
+                _loginState.value = Resource.Error("Network unavailable")
             } catch (e: Exception) {
-                _loginState.value = Resource.Error("An error occurred: ${e.localizedMessage}")
+                _loginState.value = Resource.Error("Error: ${e.localizedMessage}")
             }
         }
     }

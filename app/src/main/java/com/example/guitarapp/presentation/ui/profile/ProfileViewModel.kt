@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
+import java.io.IOException
+import java.net.SocketTimeoutException
 
 class ProfileViewModel(application: Application) :  AndroidViewModel(application){
     init {
@@ -37,8 +39,12 @@ class ProfileViewModel(application: Application) :  AndroidViewModel(application
                 } else {
                     _profileState.value = Resource.Error("Failed to fetch profile")
                 }
+            } catch (e: SocketTimeoutException) {
+                _profileState.value = Resource.Error("Connection timeout")
+            } catch (e: IOException) {
+                _profileState.value = Resource.Error("Network unavailable")
             } catch (e: Exception) {
-                _profileState.value = Resource.Error("Network error: ${e.message}")
+                _profileState.value = Resource.Error("Error: ${e.localizedMessage}")
             }
         }
     }
@@ -57,8 +63,12 @@ class ProfileViewModel(application: Application) :  AndroidViewModel(application
                 }
             } catch (e: MalformedJsonException) {
                 _profileState.value = Resource.NotAuthenticated
+            } catch (e: SocketTimeoutException) {
+                _profileState.value = Resource.Error("Connection timeout")
+            } catch (e: IOException) {
+                _profileState.value = Resource.Error("Network unavailable")
             } catch (e: Exception) {
-                _profileState.value = Resource.Error("Network error: ${e.message}")
+                _profileState.value = Resource.Error("Error: ${e.localizedMessage}")
             }
         }
     }

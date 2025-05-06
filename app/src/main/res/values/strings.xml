@@ -38,4 +38,7 @@
     <string name="toolbar_item_name_create_cover">Add Cover</string>
     <string name="toolbar_item_name_profile">Profile</string>
     <string name="toolbar_item_name_instrument">Instrument</string>
+
+    <string name="search_title">Tutorials</string>
+    <string name="search_no_results_found">No results found. Try another search.</string>
 </resources>

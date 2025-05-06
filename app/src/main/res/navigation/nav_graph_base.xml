@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/tutorialFragment">
+    app:startDestination="@id/tutorialSearchFragment">
 
     <fragment
         android:id="@+id/tutorialFragment"
@@ -27,5 +27,22 @@
             android:id="@+id/action_profileFragment_to_tutorialFragment"
             app:destination="@id/tutorialFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/tutorialSearchFragment"
+        android:name="com.example.guitarapp.presentation.ui.tutorial.search.TutorialSearchFragment"
+        android:label="Search Tutorials" >
+        <argument
+            android:name="tutorialId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <action
+            android:id="@+id/action_tutorialSearchFragment_to_tutorialFragment"
+            app:destination="@id/tutorialFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myProfileFragment"
+        android:name="com.example.guitarapp.presentation.ui.profile.MyProfileFragment"
+        android:label="MyProfileFragment" />
 
 </navigation>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/tutorialFragment"
+    <item android:id="@+id/tutorialSearchFragment"
         android:title="@string/toolbar_item_name_cover"
         android:icon="@drawable/profile_icon"/>
 
-    <item android:id="@+id/createTutorialFragment"
+    <item android:id="@+id/tutorialCreateFragment"
         android:title="@string/toolbar_item_name_create_cover"
         android:icon="@drawable/profile_icon"/>
 
@@ -13,7 +13,7 @@
         android:title="@string/toolbar_item_name_instrument"
         android:icon="@drawable/profile_icon"/>
 
-    <item android:id="@+id/profileFragment"
+    <item android:id="@+id/myProfileFragment"
         android:title="@string/toolbar_item_name_profile"
         android:icon="@drawable/profile_icon"/>
 </menu>
