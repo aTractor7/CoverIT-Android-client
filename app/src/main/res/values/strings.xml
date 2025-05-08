@@ -36,6 +36,9 @@
     <string name="tutorial_comments_label">Comments</string>
     <string name="tutorial_comments_add_hint">Write a comment...</string>
     <string name="tutorial_comments_add_button_text">Add</string>
+    <string name="tutorial_comments_reply_icon_description">Answer</string>
+    <string name="tutorial_comments_undo_reply_icon_description">Cancel answering</string>
+    <string name="tutorial_comments_replying_to_comment">Answer to #%s...</string>
 
     <string name="toolbar_item_name_cover">Cover</string>
     <string name="toolbar_item_name_create_cover">Add Cover</string>
@@ -44,6 +47,5 @@
 
     <string name="search_title">Tutorials</string>
     <string name="search_no_results_found">No results found. Try another search.</string>
-
 
 </resources>

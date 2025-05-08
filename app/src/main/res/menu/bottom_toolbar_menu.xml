@@ -3,17 +3,17 @@
 
     <item android:id="@+id/tutorialSearchFragment"
         android:title="@string/toolbar_item_name_cover"
-        android:icon="@drawable/profile_icon"/>
+        android:icon="@drawable/icon_search"/>
 
     <item android:id="@+id/tutorialCreateFragment"
         android:title="@string/toolbar_item_name_create_cover"
-        android:icon="@drawable/profile_icon"/>
+        android:icon="@drawable/icon_brush"/>
 
     <item android:id="@+id/instrumentFragment"
         android:title="@string/toolbar_item_name_instrument"
-        android:icon="@drawable/profile_icon"/>
+        android:icon="@drawable/icon_instrument"/>
 
     <item android:id="@+id/myProfileFragment"
         android:title="@string/toolbar_item_name_profile"
-        android:icon="@drawable/profile_icon"/>
+        android:icon="@drawable/icon_profile"/>
 </menu>

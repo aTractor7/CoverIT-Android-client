@@ -8,4 +8,16 @@ data class Comment(
     val songTutorial: SongTutorialShort,
     val idAnswerOn: Int,
     val comments: List<Comment>
-)
+){
+    companion object {
+        fun empty() = Comment(
+            id = 0,
+            text = "",
+            createdAt = "",
+            author = UserDto.empty(),
+            songTutorial = SongTutorialShort.empty(),
+            idAnswerOn = 0,
+            comments = emptyList()
+        )
+    }
+}

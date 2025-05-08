@@ -51,6 +51,8 @@ class TutorialFragment : Fragment(){
 
     private lateinit var commentAdapter: CommentAdapter
 
+    private var replyingToCommentId: Int = 0
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -99,14 +101,21 @@ class TutorialFragment : Fragment(){
 
         binding.btnAddComment.setOnClickListener {
             val commentText = binding.etCommentInput.text.toString()
+            if (commentText.isBlank()) return@setOnClickListener
+
             binding.etCommentInput.text.clear()
-            val idAnswerOn = 0
+            binding.etCommentInput.hint = getString(R.string.tutorial_comments_add_hint)
+
             val tutorialId = currentTutorial?.id!!
-            val commentCreate = CommentCreate(commentText,
-                idAnswerOn = idAnswerOn, songTutorialId = tutorialId)
+            val commentCreate = CommentCreate(
+                text = commentText,
+                idAnswerOn = replyingToCommentId,
+                songTutorialId = tutorialId
+            )
 
             observeCommentsState()
             viewModel.createComment(commentCreate)
+            replyingToCommentId = 0
         }
 
         commentAdapter.setOnAuthorClickListener { comment ->
@@ -114,6 +123,17 @@ class TutorialFragment : Fragment(){
                 putInt("userId", comment.author.id)
             }
             findNavController().navigate(R.id.action_tutorialFragment_to_profileFragment, args)
+        }
+
+        commentAdapter.setOnReplyClickListener { comment ->
+            if (comment.id == 0) {
+                binding.etCommentInput.hint = getString(R.string.tutorial_comments_add_hint)
+                replyingToCommentId = 0
+            } else {
+                binding.etCommentInput.hint = getString(R.string.tutorial_comments_replying_to_comment, comment.author.username)
+                replyingToCommentId = comment.id
+                binding.etCommentInput.requestFocus()
+            }
         }
     }
 
@@ -181,9 +201,10 @@ class TutorialFragment : Fragment(){
     }
 
     private fun handleCommentLoaded(comments: List<Comment>){
+        val sortedComments = comments.sortedByDescending { it.comments.size }
         binding.pbComments.visibility = View.GONE
         binding.rvComments.visibility = View.VISIBLE
-        commentAdapter.submitList(comments)
+        commentAdapter.submitList(sortedComments)
     }
 
     private fun handleAuthenticationError() {

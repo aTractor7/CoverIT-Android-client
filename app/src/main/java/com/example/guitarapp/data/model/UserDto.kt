@@ -10,4 +10,18 @@ data class UserDto(
     val skill: String,
     val instrument: String?,
     val bio: String?
-)
+){
+    companion object {
+        fun empty() = UserDto(
+            id = 0,
+            username = "",
+            email = "",
+            profileImg = null,
+            joinDate = "",
+            role = "",
+            skill = "",
+            instrument = null,
+            bio = null
+        )
+    }
+}

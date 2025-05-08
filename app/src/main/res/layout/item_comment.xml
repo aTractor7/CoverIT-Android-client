@@ -5,7 +5,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:minWidth="150dp"
     android:padding="8dp">
+
+    <TextView
+        android:id="@+id/tvCommentId"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        tools:text="123"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/tvCommentAuthor"
@@ -37,8 +49,40 @@
         android:layout_marginTop="4dp"
         android:textColor="@color/darker3_color"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvCommentText"/>
+
+    <ImageView
+        android:id="@+id/btnReply"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="28dp"
+        android:clickable="true"
+        android:contentDescription="@string/tutorial_comments_reply_icon_description"
+        android:focusable="true"
+        android:padding="4dp"
+        android:src="@drawable/icon_edit"
+        app:layout_constraintBottom_toBottomOf="@id/tvCommentDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvCommentDate"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/btnUndoReply"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="28dp"
+        android:clickable="false"
+        android:visibility="invisible"
+        android:focusable="false"
+        android:contentDescription="@string/tutorial_comments_undo_reply_icon_description"
+        android:padding="4dp"
+        android:src="@drawable/icon_cancel"
+        app:layout_constraintBottom_toBottomOf="@id/tvCommentDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/btnReply"
+        app:layout_constraintTop_toTopOf="@id/tvCommentDate"
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvNestedComments"
