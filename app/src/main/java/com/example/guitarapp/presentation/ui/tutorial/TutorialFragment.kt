@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlin.getValue
 import androidx.navigation.fragment.findNavController
 import com.example.guitarapp.R
+import com.example.guitarapp.data.model.Comment
 import com.example.guitarapp.data.model.SongBeat
 import com.example.guitarapp.data.model.SongTutorial
 
@@ -47,11 +48,20 @@ class TutorialFragment : Fragment(){
 
     private var currentTutorial: SongTutorial? = null
 
+    private lateinit var commentAdapter: CommentAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTutorialBinding.inflate(inflater, container, false)
+
+        commentAdapter = CommentAdapter()
+        binding.rvComments.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = commentAdapter
+        }
+
         return binding.root
     }
 
@@ -84,6 +94,13 @@ class TutorialFragment : Fragment(){
                     args
                 )
             }
+        }
+
+        commentAdapter.setOnAuthorClickListener { comment ->
+            val args = Bundle().apply {
+                putInt("userId", comment.author.id)
+            }
+            findNavController().navigate(R.id.action_tutorialFragment_to_profileFragment, args)
         }
     }
 
@@ -124,6 +141,16 @@ class TutorialFragment : Fragment(){
         val adapter = BeatGroupAdapter(groupedBeats)
         binding.rvBeatsContainer.layoutManager = LinearLayoutManager(requireContext())
         binding.rvBeatsContainer.adapter = adapter
+
+        if (tutorial.comments.isNotEmpty()) {
+            binding.pbComments.visibility = View.GONE
+            binding.rvComments.visibility = View.VISIBLE
+            commentAdapter.submitList(tutorial.comments)
+        } else {
+            binding.pbComments.visibility = View.GONE
+            binding.rvComments.visibility = View.GONE
+            Toast.makeText(requireContext(), "Немає коментарів", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun handleAuthenticationError() {
@@ -161,6 +188,7 @@ class TutorialFragment : Fragment(){
                 currentGroup.add(beat)
             }
 
+            //Todo: змінити тут константу на залежний від ширини екрану розмір
             if (beat.text.endsWith("\n") || currentGroup.sumOf { it.text.length } > 40) {
                 result.add(currentGroup.toList())
                 currentGroup.clear()

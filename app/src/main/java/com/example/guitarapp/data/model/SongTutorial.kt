@@ -9,5 +9,6 @@ data class SongTutorial(
     val recommendedStrumming: String?,
     val tutorialAuthor: UserDto,
     val song: SongShort,
-    val beats: List<SongBeat>
+    val beats: List<SongBeat>,
+    val comments: List<Comment>
 )

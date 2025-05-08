@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.guitarapp.data.model.SongTutorial
 import com.example.guitarapp.data.remote.RetrofitInstanceWithToken
 import com.example.guitarapp.data.remote.SongTutorialApi
-import com.example.guitarapp.utils.CookieUtils.extractSessionId
 import com.example.guitarapp.utils.Resource
 import com.google.gson.stream.MalformedJsonException
 import kotlinx.coroutines.flow.MutableStateFlow

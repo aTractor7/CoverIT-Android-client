@@ -1,6 +1,7 @@
 package com.example.guitarapp.data.remote
 
 import android.content.Context
+import com.example.guitarapp.data.model.CommentCreate
 import com.example.guitarapp.utils.Constants
 import com.example.guitarapp.utils.SessionInterceptor
 import okhttp3.OkHttpClient
@@ -30,5 +31,9 @@ object RetrofitInstanceWithToken {
 
     val songTutorialApi: SongTutorialApi by lazy {
         retrofit!!.create(SongTutorialApi::class.java)
+    }
+
+    val commentApi: CommentApi by lazy {
+        retrofit!!.create(CommentApi::class.java)
     }
 }

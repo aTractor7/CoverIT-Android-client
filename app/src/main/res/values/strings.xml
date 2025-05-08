@@ -33,6 +33,7 @@
     <string name="tutorial_author_label">CreatedBy: </string>
     <string name="tutorial_created_at_label">at: </string>
     <string name="tutorial_label">Tutorial: </string>
+    <string name="tutorial_comments_label">Comments</string>
 
     <string name="toolbar_item_name_cover">Cover</string>
     <string name="toolbar_item_name_create_cover">Add Cover</string>
@@ -41,4 +42,6 @@
 
     <string name="search_title">Tutorials</string>
     <string name="search_no_results_found">No results found. Try another search.</string>
+
+
 </resources>
