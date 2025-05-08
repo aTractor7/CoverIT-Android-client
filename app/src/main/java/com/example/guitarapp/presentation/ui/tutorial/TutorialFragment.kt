@@ -19,6 +19,7 @@ import kotlin.getValue
 import androidx.navigation.fragment.findNavController
 import com.example.guitarapp.R
 import com.example.guitarapp.data.model.Comment
+import com.example.guitarapp.data.model.CommentCreate
 import com.example.guitarapp.data.model.SongBeat
 import com.example.guitarapp.data.model.SongTutorial
 
@@ -69,7 +70,7 @@ class TutorialFragment : Fragment(){
         val tutorialId = arguments?.getInt(ARG_TUTORIAL_ID, -1) ?: -1
         if (!handleInvalidTutorialId(tutorialId)) return
 
-        setupAuthorClickListener()
+        setupClickListeners()
         observeTutorialState()
         viewModel.fetchSongTutorial(tutorialId)
     }
@@ -83,7 +84,7 @@ class TutorialFragment : Fragment(){
         return true
     }
 
-    private fun setupAuthorClickListener() {
+    private fun setupClickListeners() {
         binding.tvTutorialAuthor.setOnClickListener {
             currentTutorial?.tutorialAuthor?.id?.let { authorId ->
                 val args = Bundle().apply {
@@ -94,6 +95,18 @@ class TutorialFragment : Fragment(){
                     args
                 )
             }
+        }
+
+        binding.btnAddComment.setOnClickListener {
+            val commentText = binding.etCommentInput.text.toString()
+            binding.etCommentInput.text.clear()
+            val idAnswerOn = 0
+            val tutorialId = currentTutorial?.id!!
+            val commentCreate = CommentCreate(commentText,
+                idAnswerOn = idAnswerOn, songTutorialId = tutorialId)
+
+            observeCommentsState()
+            viewModel.createComment(commentCreate)
         }
 
         commentAdapter.setOnAuthorClickListener { comment ->
@@ -143,14 +156,34 @@ class TutorialFragment : Fragment(){
         binding.rvBeatsContainer.adapter = adapter
 
         if (tutorial.comments.isNotEmpty()) {
-            binding.pbComments.visibility = View.GONE
-            binding.rvComments.visibility = View.VISIBLE
-            commentAdapter.submitList(tutorial.comments)
+            handleCommentLoaded(tutorial.comments)
         } else {
             binding.pbComments.visibility = View.GONE
             binding.rvComments.visibility = View.GONE
             Toast.makeText(requireContext(), "Немає коментарів", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun observeCommentsState() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.commentState.collectLatest { state ->
+                when (state) {
+                    is Resource.Loading -> {
+                        // Показати лоадер (можна винести окремо за бажанням)
+                    }
+                    is Resource.Success -> handleCommentLoaded(state.data)
+                    is Resource.NotAuthenticated -> handleAuthenticationError()
+                    is Resource.Error -> showError(state.message)
+                    else -> {}
+                }
+            }
+        }
+    }
+
+    private fun handleCommentLoaded(comments: List<Comment>){
+        binding.pbComments.visibility = View.GONE
+        binding.rvComments.visibility = View.VISIBLE
+        commentAdapter.submitList(comments)
     }
 
     private fun handleAuthenticationError() {

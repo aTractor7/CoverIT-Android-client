@@ -34,6 +34,8 @@
     <string name="tutorial_created_at_label">at: </string>
     <string name="tutorial_label">Tutorial: </string>
     <string name="tutorial_comments_label">Comments</string>
+    <string name="tutorial_comments_add_hint">Write a comment...</string>
+    <string name="tutorial_comments_add_button_text">Add</string>
 
     <string name="toolbar_item_name_cover">Cover</string>
     <string name="toolbar_item_name_create_cover">Add Cover</string>

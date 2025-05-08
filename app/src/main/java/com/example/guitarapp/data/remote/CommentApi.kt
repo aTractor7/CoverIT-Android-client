@@ -15,7 +15,7 @@ interface CommentApi {
         @Query("page") page: Int = 0,
         @Query("size") size: Int = 10,
         @Query("sortField") sortField: String? = null,
-        @Query("songTitle") songTitle: String? = null
+        @Query("tutorialId") tutorialId: Int? = null
     ): Response<List<Comment>>
 
     @POST("/comments")

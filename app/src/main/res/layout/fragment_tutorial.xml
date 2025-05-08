@@ -178,20 +178,53 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rvBeatsContainer"/>
 
+        <EditText
+            android:id="@+id/etCommentInput"
+            android:layout_width="275dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/rounded_searchview"
+            android:hint="@string/tutorial_comments_add_hint"
+            android:textColorHint="@color/darkest_color"
+            android:autofillHints=""
+            android:inputType="textCapSentences|textMultiLine"
+            android:padding="12dp"
+            android:textColor="@color/darkest_color"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvCommentsLabel" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddComment"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="5dp"
+            android:backgroundTint="@color/darker1_color"
+            android:text="@string/tutorial_comments_add_button_text"
+            android:textColor="@color/darkest_color"
+            app:cornerRadius="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/etCommentInput"
+            app:layout_constraintTop_toBottomOf="@id/tvCommentsLabel" />
+
         <ProgressBar
             android:id="@+id/pbComments"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvCommentsLabel"/>
+            app:layout_constraintTop_toBottomOf="@id/etCommentInput"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvComments"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="15dp"
             android:visibility="gone"
             android:nestedScrollingEnabled="true"
             app:layout_constraintBottom_toBottomOf="parent"
