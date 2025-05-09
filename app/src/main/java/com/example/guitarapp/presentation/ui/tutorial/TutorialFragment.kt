@@ -22,6 +22,7 @@ import com.example.guitarapp.data.model.Comment
 import com.example.guitarapp.data.model.CommentCreate
 import com.example.guitarapp.data.model.SongBeat
 import com.example.guitarapp.data.model.SongTutorial
+import com.example.guitarapp.presentation.ui.comment.CommentViewModel
 
 
 class TutorialFragment : Fragment(){
@@ -29,6 +30,13 @@ class TutorialFragment : Fragment(){
         object : ViewModelProvider.Factory {
             override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
                 return TutorialViewModel(requireActivity().application) as T
+            }
+        }
+    }
+    private val commentViewModel: CommentViewModel by viewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                return CommentViewModel(requireActivity().application) as T
             }
         }
     }
@@ -114,7 +122,7 @@ class TutorialFragment : Fragment(){
             )
 
             observeCommentsState()
-            viewModel.createComment(commentCreate)
+            commentViewModel.createComment(commentCreate)
             replyingToCommentId = 0
         }
 
@@ -186,7 +194,7 @@ class TutorialFragment : Fragment(){
 
     private fun observeCommentsState() {
         lifecycleScope.launchWhenStarted {
-            viewModel.commentState.collectLatest { state ->
+            commentViewModel.commentState.collectLatest { state ->
                 when (state) {
                     is Resource.Loading -> {
                         // Показати лоадер (можна винести окремо за бажанням)
@@ -209,11 +217,11 @@ class TutorialFragment : Fragment(){
 
     private fun handleAuthenticationError() {
         startLoginActivity()
-        Toast.makeText(requireContext(), "Your session has expired.", Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), getString(R.string.session_expired), Toast.LENGTH_LONG).show()
     }
 
     private fun showError(message: String?) {
-        Toast.makeText(requireContext(), message ?: "Error", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), message ?: getString(R.string.unknown_error), Toast.LENGTH_SHORT).show()
     }
 
 

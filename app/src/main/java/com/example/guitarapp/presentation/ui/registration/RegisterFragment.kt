@@ -69,7 +69,7 @@ class RegisterFragment : Fragment() {
         val adapter = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.skill_levels_array,
-            android.R.layout.simple_spinner_item
+            R.layout.dropdown_menu_popup_item
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerSkill.adapter = adapter

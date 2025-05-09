@@ -36,4 +36,12 @@ object RetrofitInstanceWithToken {
     val commentApi: CommentApi by lazy {
         retrofit!!.create(CommentApi::class.java)
     }
+
+    val artistApi: ArtistApi by lazy {
+        retrofit!!.create(ArtistApi::class.java)
+    }
+
+    val songApi: SongApi by lazy {
+        retrofit!!.create(SongApi::class.java)
+    }
 }

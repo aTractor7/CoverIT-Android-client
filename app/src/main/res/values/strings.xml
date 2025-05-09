@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">CoverIT</string>
+    <string name="create_button">Create</string>
+
     <string name="login_username_hint">Username</string>
     <string name="login_password_hint">Password</string>
     <string name="login_create_account">Create</string>
@@ -47,5 +49,33 @@
 
     <string name="search_title">Tutorials</string>
     <string name="search_no_results_found">No results found. Try another search.</string>
+
+    <string name="create_artist_title">Create New Artist</string>
+    <string name="artist_name_hint">Enter artist name</string>
+    <string name="artist_name_required">Artist name is required</string>
+    <string name="artist_bio_hint">Enter artist biography (optional)</string>
+    <string name="artist_created_successfully">Artist created successfully</string>
+    <string name="session_expired">Your session has expired</string>
+    <string name="unknown_error">Unknown error occurred</string>
+
+    <string name="create_song_title">Create New Song</string>
+    <string name="song_title_label">Song Title</string>
+    <string name="song_title_hint">Enter song title</string>
+    <string name="song_title_required">Song title is required</string>
+    <string name="song_genre_label">Genre</string>
+    <string name="song_genre_hint">Enter song genre</string>
+    <string name="song_genre_required">Genre is required</string>
+    <string name="release_date_label">Release Date</string>
+    <string name="release_date_hint">YYYY-MM-DD</string>
+    <string name="selected_artists_label">Selected Artists</string>
+    <string name="add_artists_label">Add Artists</string>
+    <string name="artist_search_hint">Search artists by name</string>
+    <string name="search_button">Search</string>
+    <string name="clear_search_button">Clear Search</string>
+    <string name="no_artists_found">No artists found. If you want to add one click here.</string>
+    <string name="artist_search_error">Error searching artists</string>
+    <string name="song_created_successfully">Song created successfully</string>
+    <string name="at_least_one_artist_required">Please add at least one artist</string>
+    <string name="song_remove_artist_icon_description">Remove selected artist</string>
 
 </resources>

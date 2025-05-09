@@ -44,5 +44,21 @@
         android:id="@+id/myProfileFragment"
         android:name="com.example.guitarapp.presentation.ui.profile.MyProfileFragment"
         android:label="MyProfileFragment" />
+    <fragment
+        android:id="@+id/songCreateFragment"
+        android:name="com.example.guitarapp.presentation.ui.song.SongCreateFragment"
+        android:label="SongCreateFragment" >
+        <action
+            android:id="@+id/action_songCreateFragment_to_artistCreateFragment"
+            app:destination="@id/artistCreateFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/artistCreateFragment"
+        android:name="com.example.guitarapp.presentation.ui.artist.ArtistCreateFragment"
+        android:label="ArtistCreateFragment" >
+        <action
+            android:id="@+id/action_artistCreateFragment_to_songCreateFragment"
+            app:destination="@id/songCreateFragment" />
+    </fragment>
 
 </navigation>
