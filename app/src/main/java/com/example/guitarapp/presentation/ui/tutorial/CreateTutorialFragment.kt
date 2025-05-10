@@ -14,14 +14,22 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.guitarapp.MainActivity
 import com.example.guitarapp.R
+import com.example.guitarapp.data.model.Chord
 import com.example.guitarapp.data.model.SongShort
 import com.example.guitarapp.data.model.SongTutorialCreate
 import com.example.guitarapp.databinding.FragmentTutorialCreateBinding
-import com.example.guitarapp.databinding.ItemSelectedSomeNameBinding
+import com.example.guitarapp.presentation.ui.chord.ChordViewModel
+import com.example.guitarapp.presentation.ui.chord.ChordsSearchAdapter
 import com.example.guitarapp.presentation.ui.song.SongSearchAdapter
 import com.example.guitarapp.presentation.ui.song.SongViewModel
 import com.example.guitarapp.utils.Resource
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
 import kotlinx.coroutines.flow.collectLatest
+
+//TODO: перше акорди треба виводити рядком а не знового кожен. Далі треба робити додавання бітів.
+
 
 class CreateTutorialFragment : Fragment() {
     private val tutorialViewModel: TutorialViewModel by viewModels {
@@ -40,11 +48,24 @@ class CreateTutorialFragment : Fragment() {
         }
     }
 
+    private val chordViewModel: ChordViewModel by viewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                return ChordViewModel(requireActivity().application) as T
+            }
+        }
+    }
+
     private var _binding: FragmentTutorialCreateBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var songSearchAdapter: SongSearchAdapter
+    private lateinit var chordSearchAdapter: ChordsSearchAdapter
+    private lateinit var selectedChordsAdapter: SelectedChordsAdapter
+
+
     private var selectedSong: SongShort? = null
+    private val selectedChords = mutableListOf<Chord>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,12 +98,42 @@ class CreateTutorialFragment : Fragment() {
             binding.llSelectedSong.visibility = View.VISIBLE
             binding.tvSelectedSongTitle.text = song.title
 
-            hideSearchViews()
+            hideSearchSongViews()
+        }
+
+        chordSearchAdapter = ChordsSearchAdapter {chord ->
+            if (!selectedChords.any { it.id == chord.id }) {
+                selectedChords.add(chord)
+                selectedChordsAdapter.notifyItemInserted(selectedChords.size - 1)
+            }
+            clearSearchChords()
+        }
+
+        selectedChordsAdapter = SelectedChordsAdapter(selectedChords) {chord ->
+            val index = selectedChords.indexOf(chord)
+            selectedChords.remove(chord)
+            selectedChordsAdapter.notifyItemRemoved(index)
         }
 
         binding.rvSearchResults.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = songSearchAdapter
+        }
+
+        binding.rvSearchChords.apply {
+            layoutManager = FlexboxLayoutManager(requireContext()).apply {
+                flexDirection = FlexDirection.ROW
+                flexWrap = FlexWrap.WRAP
+            }
+            adapter = chordSearchAdapter
+        }
+
+        binding.rvSelectedChords.apply {
+            layoutManager = FlexboxLayoutManager(requireContext()).apply {
+                flexDirection = FlexDirection.ROW
+                flexWrap = FlexWrap.WRAP
+            }
+            adapter = selectedChordsAdapter
         }
     }
 
@@ -91,12 +142,6 @@ class CreateTutorialFragment : Fragment() {
             val query = binding.etSongSearch.text.toString().trim()
             if (query.isNotEmpty()) {
                 songViewModel.fetchSongs(query)
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.please_enter_song_name),
-                    Toast.LENGTH_SHORT
-                ).show()
             }
         }
 
@@ -111,6 +156,13 @@ class CreateTutorialFragment : Fragment() {
                     getString(R.string.please_select_song),
                     Toast.LENGTH_SHORT
                 ).show()
+            }
+        }
+
+        binding.btnSearchChords.setOnClickListener {
+            val query = binding.etChordSearch.text.toString().trim()
+            if(query.isNotEmpty()) {
+                chordViewModel.fetchChords(query)
             }
         }
 
@@ -142,6 +194,18 @@ class CreateTutorialFragment : Fragment() {
                 when (state) {
                     is Resource.Loading -> showTutorialCreationLoading(true)
                     is Resource.Success -> handleTutorialCreated()
+                    is Resource.NotAuthenticated -> handleAuthenticationError()
+                    is Resource.Error -> showTutorialCreationError(state.message)
+                    else -> {}
+                }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            chordViewModel.chordState.collectLatest { state ->
+                when (state) {
+                    is Resource.Loading -> showChordSearchLoading(true)
+                    is Resource.Success -> handleChordsSearchResults(state.data)
                     is Resource.NotAuthenticated -> handleAuthenticationError()
                     is Resource.Error -> showTutorialCreationError(state.message)
                     else -> {}
@@ -180,6 +244,18 @@ class CreateTutorialFragment : Fragment() {
         return true
     }
 
+    private fun handleChordsSearchResults(chords: List<Chord>) {
+        showChordSearchLoading(false)
+        if (chords.isEmpty()) {
+            binding.tvNoChordsFound.visibility = View.VISIBLE
+            binding.rvSearchChords.visibility = View.GONE
+        } else {
+            binding.tvNoChordsFound.visibility = View.GONE
+            binding.rvSearchChords.visibility = View.VISIBLE
+            chordSearchAdapter.submitList(chords)
+        }
+    }
+
     private fun createTutorial(song: SongShort) {
         val tutorial = SongTutorialCreate(
             difficulty = binding.etDifficulty.text.toString(),
@@ -199,7 +275,7 @@ class CreateTutorialFragment : Fragment() {
         binding.etSongSearch.text.clear()
     }
 
-    private fun hideSearchViews() {
+    private fun hideSearchSongViews() {
         binding.apply {
             etSongSearch.visibility = View.GONE
             btnSearchSong.visibility = View.GONE
@@ -208,6 +284,12 @@ class CreateTutorialFragment : Fragment() {
             tvNoSongFound.visibility = View.INVISIBLE
         }
         binding.etSongSearch.clearFocus()
+    }
+
+    private fun clearSearchChords() {
+        binding.etChordSearch.text.clear()
+        binding.rvSearchChords.visibility = View.GONE
+        binding.tvNoChordsFound.visibility = View.GONE
     }
 
     private fun showSearchViews() {
@@ -223,6 +305,10 @@ class CreateTutorialFragment : Fragment() {
 
     private fun showTutorialCreationLoading(isLoading: Boolean) {
         binding.btnCreateTutorial.isEnabled = !isLoading
+    }
+
+    private fun showChordSearchLoading(isLoading: Boolean) {
+        binding.pbChordsSearch.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     private fun showSongSearchError(message: String?) {

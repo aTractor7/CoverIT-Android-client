@@ -127,7 +127,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/no_artists_found"
+            android:text="@string/no_song_found"
             android:clickable="true"
             android:focusable="true"
             android:textColor="@color/darker3_color"
@@ -192,7 +192,7 @@
             android:id="@+id/tvStrummingLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             android:text="@string/strumming_label"
             android:textColor="@color/darker3_color"
             android:textSize="16sp"
@@ -214,6 +214,110 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvStrummingLabel" />
 
+        <TextView
+            android:id="@+id/tvSelectedChordsLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/selected_chord_label"
+            android:textColor="@color/darker3_color"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etStrumming" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSelectedChords"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSelectedChordsLabel" />
+
+        <TextView
+            android:id="@+id/tvAddChordLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/chord_label"
+            android:textColor="@color/darker3_color"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rvSelectedChords" />
+
+        <EditText
+            android:id="@+id/etChordSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/chord_search_hint"
+            android:inputType="textCapWords"
+            android:textColor="@color/darkest_color"
+            android:textColorHint="@color/darker3_color"
+            app:layout_constraintEnd_toStartOf="@+id/btnSearchChords"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvAddChordLabel" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSearchChords"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="@color/darker1_color"
+            android:text="@string/search_button"
+            android:textColor="@color/darkest_color"
+            app:cornerRadius="15dp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/etChordSearch"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/etChordSearch" />
+
+        <ProgressBar
+            android:id="@+id/pbChordsSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etChordSearch" />
+
+        <TextView
+            android:id="@+id/tvNoChordsFound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/no_chords_found"
+            android:clickable="true"
+            android:focusable="true"
+            android:textColor="@color/darker3_color"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pbChordsSearch" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSearchChords"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvNoChordsFound" />
+
+        <ProgressBar
+            android:id="@+id/pbLoadingChords"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rvSearchChords" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCreateTutorial"
             android:layout_width="0dp"
@@ -225,7 +329,7 @@
             app:cornerRadius="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etStrumming" />
+            app:layout_constraintTop_toBottomOf="@+id/pbLoadingChords" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

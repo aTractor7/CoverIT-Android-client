@@ -22,6 +22,9 @@ import com.example.guitarapp.databinding.FragmentSongCreateBinding
 import com.example.guitarapp.presentation.ui.artist.ArtistViewModel
 import com.example.guitarapp.presentation.ui.artist.ArtistsSearchAdapter
 import com.example.guitarapp.utils.Resource
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexWrap
+import com.google.android.flexbox.FlexboxLayoutManager
 import kotlinx.coroutines.flow.collectLatest
 
 class SongCreateFragment : Fragment() {
@@ -89,7 +92,10 @@ class SongCreateFragment : Fragment() {
         }
 
         binding.rvSelectedArtists.apply {
-            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = FlexboxLayoutManager(requireContext()).apply {
+                flexDirection = FlexDirection.ROW
+                flexWrap = FlexWrap.WRAP
+            }
             adapter = selectedArtistsAdapter
         }
 

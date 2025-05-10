@@ -44,4 +44,8 @@ object RetrofitInstanceWithToken {
     val songApi: SongApi by lazy {
         retrofit!!.create(SongApi::class.java)
     }
+
+    val chordApi: ChordApi by lazy {
+        retrofit!!.create(ChordApi::class.java)
+    }
 }

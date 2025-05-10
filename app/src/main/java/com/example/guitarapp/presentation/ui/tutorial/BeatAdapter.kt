@@ -37,8 +37,6 @@ class BeatAdapter(
 
         setLayoutMinWidth(holder, beat.beatChords.size)
 
-
-
         for (chord in beat.beatChords) {
             val chordView = TextView(context).apply {
                 text = chord.chord.name

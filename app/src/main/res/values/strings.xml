@@ -92,6 +92,10 @@
     <string name="backtrack_hint">Enter backtrack URL</string>
     <string name="strumming_label">Recommended strumming (optional)</string>
     <string name="strumming_hint">Enter recommended strumming pattern</string>
+    <string name="chord_label">Select all chords that are used in song.</string>
+    <string name="chord_search_hint">Enter chord</string>
+    <string name="selected_chord_label">Selected Chords</string>
+    <string name="no_chords_found">No chords found.</string>
     <string name="back">Back</string>
     <string name="please_enter_song_name">Enter soon name please</string>
     <string name="please_select_song">Select song please</string>
