@@ -38,6 +38,7 @@
     <string name="tutorial_comments_label">Comments</string>
     <string name="tutorial_comments_add_hint">Write a comment...</string>
     <string name="tutorial_comments_add_button_text">Add</string>
+    <string name="tutorial_comments_empty">No comment yet.</string>
     <string name="tutorial_comments_reply_icon_description">Answer</string>
     <string name="tutorial_comments_undo_reply_icon_description">Cancel answering</string>
     <string name="tutorial_comments_replying_to_comment">Answer to #%s...</string>
@@ -78,4 +79,25 @@
     <string name="at_least_one_artist_required">Please add at least one artist</string>
     <string name="song_remove_artist_icon_description">Remove selected artist</string>
 
+    <string name="create_tutorial_title">Create New Tutorial</string>
+    <string name="song_search_label">Choose the song you want to make a tutorial for</string>
+    <string name="song_search_hint">Enter song title</string>
+    <string name="search">Search</string>
+    <string name="no_song_found">No song found. If you want to add one click here.</string>
+    <string name="difficulty_label">Difficulty</string>
+    <string name="difficulty_hint">SIMPLIFIED/ORIGINAL</string>
+    <string name="description_label">Description (optional)</string>
+    <string name="description_hint">Enter tutorial description</string>
+    <string name="backtrack_label">Backtrack URL (optional)</string>
+    <string name="backtrack_hint">Enter backtrack URL</string>
+    <string name="strumming_label">Recommended strumming (optional)</string>
+    <string name="strumming_hint">Enter recommended strumming pattern</string>
+    <string name="back">Back</string>
+    <string name="please_enter_song_name">Enter soon name please</string>
+    <string name="please_select_song">Select song please</string>
+    <string name="song_search_error">Error during song find</string>
+    <string name="difficulty_required">Difficulty is required param</string>
+    <string name="tutorial_created_successfully">Tutorial created</string>
+    <string name="tutorial_creation_error">Tutorial creation error</string>
+    <string name="tutorial_covered_song">Covered song</string>
 </resources>

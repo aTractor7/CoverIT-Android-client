@@ -1,4 +1,4 @@
-package com.example.guitarapp.presentation.ui.song
+package com.example.guitarapp.presentation.ui.artist
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,14 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.guitarapp.R
 import com.example.guitarapp.data.model.ArtistShort
 
-class SearchArtistsAdapter(
+class ArtistsSearchAdapter(
     private val onArtistClick: (ArtistShort) -> Unit
-) : RecyclerView.Adapter<SearchArtistsAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<ArtistsSearchAdapter.ViewHolder>() {
 
     private var artists = listOf<ArtistShort>()
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvArtistName: TextView = view.findViewById(R.id.tvArtistName)
+        val tvArtistName: TextView = view.findViewById(R.id.tvName)
     }
 
     fun submitList(newList: List<ArtistShort>) {
@@ -25,7 +25,7 @@ class SearchArtistsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_artist_search_result, parent, false)
+            .inflate(R.layout.item_some_name_search_result, parent, false)
         return ViewHolder(view)
     }
 

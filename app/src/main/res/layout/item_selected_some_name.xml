@@ -2,6 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/clSelectedItem"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginEnd="8dp"
@@ -9,7 +10,7 @@
     android:background="@drawable/border_background">
 
     <TextView
-        android:id="@+id/tvArtistName"
+        android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/darkest_color"
@@ -17,18 +18,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btnRemoveArtist"
+        app:layout_constraintEnd_toStartOf="@id/btnRemove"
         android:layout_marginEnd="8dp"/>
 
     <ImageView
-        android:id="@+id/btnRemoveArtist"
+        android:id="@+id/btnRemove"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:clickable="true"
         android:contentDescription="@string/song_remove_artist_icon_description"
         android:focusable="true"
         android:src="@drawable/icon_cancel"
-        app:layout_constraintTop_toTopOf="@id/tvArtistName"
-        app:layout_constraintBottom_toBottomOf="@id/tvArtistName"
+        app:layout_constraintTop_toTopOf="@id/tvName"
+        app:layout_constraintBottom_toBottomOf="@id/tvName"
         app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

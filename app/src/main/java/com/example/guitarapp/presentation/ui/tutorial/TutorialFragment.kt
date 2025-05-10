@@ -188,7 +188,7 @@ class TutorialFragment : Fragment(){
         } else {
             binding.pbComments.visibility = View.GONE
             binding.rvComments.visibility = View.GONE
-            Toast.makeText(requireContext(), "Немає коментарів", Toast.LENGTH_SHORT).show()
+            binding.tvCommentsEmpty.visibility = View.VISIBLE
         }
     }
 

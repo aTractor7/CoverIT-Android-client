@@ -20,6 +20,7 @@ import com.example.guitarapp.data.model.Song
 import com.example.guitarapp.data.model.SongGenre
 import com.example.guitarapp.databinding.FragmentSongCreateBinding
 import com.example.guitarapp.presentation.ui.artist.ArtistViewModel
+import com.example.guitarapp.presentation.ui.artist.ArtistsSearchAdapter
 import com.example.guitarapp.utils.Resource
 import kotlinx.coroutines.flow.collectLatest
 
@@ -44,7 +45,7 @@ class SongCreateFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var selectedArtistsAdapter: SelectedArtistsAdapter
-    private lateinit var searchArtistsAdapter: SearchArtistsAdapter
+    private lateinit var artistsSearchAdapter: ArtistsSearchAdapter
 
     private val selectedArtists = mutableListOf<ArtistShort>()
 
@@ -79,7 +80,7 @@ class SongCreateFragment : Fragment() {
             selectedArtistsAdapter.notifyItemRemoved(index)
         }
 
-        searchArtistsAdapter = SearchArtistsAdapter { artist ->
+        artistsSearchAdapter = ArtistsSearchAdapter { artist ->
             if (!selectedArtists.any { it.id == artist.id }) {
                 selectedArtists.add(artist)
                 selectedArtistsAdapter.notifyItemInserted(selectedArtists.size - 1)
@@ -94,7 +95,7 @@ class SongCreateFragment : Fragment() {
 
         binding.rvSearchArtists.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = searchArtistsAdapter
+            adapter = artistsSearchAdapter
         }
     }
 
@@ -190,7 +191,7 @@ class SongCreateFragment : Fragment() {
         } else {
             binding.tvNoArtistsFound.visibility = View.GONE
             binding.rvSearchArtists.visibility = View.VISIBLE
-            searchArtistsAdapter.submitList(artists)
+            artistsSearchAdapter.submitList(artists)
         }
     }
 

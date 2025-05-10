@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.guitarapp.R
 import com.example.guitarapp.data.model.ArtistShort
-import com.google.android.material.button.MaterialButton
 
 class SelectedArtistsAdapter(
     private val artists: List<ArtistShort>,
@@ -16,13 +15,13 @@ class SelectedArtistsAdapter(
 ) : RecyclerView.Adapter<SelectedArtistsAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvArtistName: TextView = view.findViewById(R.id.tvArtistName)
-        val btnRemove: ImageView = view.findViewById(R.id.btnRemoveArtist)
+        val tvArtistName: TextView = view.findViewById(R.id.tvName)
+        val btnRemove: ImageView = view.findViewById(R.id.btnRemove)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_selected_artist, parent, false)
+            .inflate(R.layout.item_selected_some_name, parent, false)
         return ViewHolder(view)
     }
 

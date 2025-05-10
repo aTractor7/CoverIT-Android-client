@@ -5,7 +5,7 @@
         android:title="@string/toolbar_item_name_cover"
         android:icon="@drawable/icon_search"/>
 
-    <item android:id="@+id/songCreateFragment"
+    <item android:id="@+id/createTutorialFragment"
         android:title="@string/toolbar_item_name_create_cover"
         android:icon="@drawable/icon_brush"/>
 

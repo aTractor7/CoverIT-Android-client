@@ -9,7 +9,7 @@
     android:background="?attr/selectableItemBackground">
 
     <TextView
-        android:id="@+id/tvArtistName"
+        android:id="@+id/tvName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="@color/darkest_color"

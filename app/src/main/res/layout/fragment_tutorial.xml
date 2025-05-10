@@ -211,6 +211,20 @@
             app:layout_constraintStart_toEndOf="@+id/etCommentInput"
             app:layout_constraintTop_toBottomOf="@id/tvCommentsLabel" />
 
+        <TextView
+            android:id="@+id/tvCommentsEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/tutorial_comments_empty"
+            android:textColor="@color/darker2_color"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnAddComment" />
+
         <ProgressBar
             android:id="@+id/pbComments"
             android:layout_width="wrap_content"

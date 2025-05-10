@@ -1,9 +1,12 @@
 package com.example.guitarapp.data.remote
 
 import com.example.guitarapp.data.model.SongTutorial
+import com.example.guitarapp.data.model.SongTutorialCreate
 import com.example.guitarapp.data.model.SongTutorialShort
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -20,4 +23,9 @@ interface SongTutorialApi {
         @Query("sortField") sortField: String? = null,
         @Query("songTitle") songTitle: String? = null
     ): Response<List<SongTutorialShort>>
+
+    @POST("tutorials")
+    suspend fun createSongTutorial(
+        @Body songTutorialCreate: SongTutorialCreate
+    ): Response<SongTutorialCreate>
 }

@@ -3,10 +3,8 @@ package com.example.guitarapp.presentation.ui.tutorial
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.guitarapp.data.model.Comment
-import com.example.guitarapp.data.model.CommentCreate
 import com.example.guitarapp.data.model.SongTutorial
-import com.example.guitarapp.data.remote.CommentApi
+import com.example.guitarapp.data.model.SongTutorialCreate
 import com.example.guitarapp.data.remote.RetrofitInstanceWithToken
 import com.example.guitarapp.data.remote.SongTutorialApi
 import com.example.guitarapp.utils.Resource
@@ -26,6 +24,9 @@ class TutorialViewModel(application: Application) :  AndroidViewModel(applicatio
 
     private val _tutorialState = MutableStateFlow<Resource<SongTutorial>>(Resource.Idle)
     val tutorialState: StateFlow<Resource<SongTutorial>> = _tutorialState
+
+    private val _tutorialCreateState = MutableStateFlow<Resource<SongTutorialCreate>>(Resource.Idle)
+    val tutorialCreateState: StateFlow<Resource<SongTutorialCreate>> = _tutorialCreateState
 
     fun fetchSongTutorial(tutorialId: Int) {
         viewModelScope.launch {
@@ -47,6 +48,30 @@ class TutorialViewModel(application: Application) :  AndroidViewModel(applicatio
                 _tutorialState.value = Resource.Error("Network unavailable")
             } catch (e: Exception) {
                 _tutorialState.value = Resource.Error("Error: ${e.localizedMessage}")
+            }
+        }
+    }
+
+    fun createSongTutorial(tutorialCreate: SongTutorialCreate) {
+        viewModelScope.launch {
+            _tutorialCreateState.value = Resource.Loading
+            try{
+                val response = tutorialApi.createSongTutorial(tutorialCreate)
+                if(response.isSuccessful && response.body() != null) {
+                    var created: SongTutorialCreate = response.body()!!
+
+                    _tutorialCreateState.value = Resource.Success(created)
+                } else {
+                    _tutorialCreateState.value = Resource.Error("Failed to create tutorial")
+                }
+            } catch (e: MalformedJsonException) {
+                _tutorialCreateState.value = Resource.NotAuthenticated
+            } catch (e: SocketTimeoutException) {
+                _tutorialCreateState.value = Resource.Error("Connection timeout")
+            } catch (e: IOException) {
+                _tutorialCreateState.value = Resource.Error("Network unavailable")
+            } catch (e: Exception) {
+                _tutorialCreateState.value = Resource.Error("Error: ${e.localizedMessage}")
             }
         }
     }
