@@ -1,4 +1,4 @@
-package com.example.guitarapp.presentation.ui.tutorial
+package com.example.guitarapp.presentation.ui.tutorial.create
 
 import android.view.LayoutInflater
 import android.view.View

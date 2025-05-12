@@ -18,7 +18,7 @@ object CookieUtils {
         val headers = response.headers()
         val cookieLocation = headers.values("Location")
 
-        return cookieLocation.firstOrNull { it.startsWith("users/") }
+        return cookieLocation.firstOrNull { it.contains("users/") }
             ?.substringAfter("users/")
     }
 }

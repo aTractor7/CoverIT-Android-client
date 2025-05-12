@@ -104,4 +104,10 @@
     <string name="tutorial_created_successfully">Tutorial created</string>
     <string name="tutorial_creation_error">Tutorial creation error</string>
     <string name="tutorial_covered_song">Covered song</string>
+    <string name="beats_label">Write a tutorial</string>
+    <string name="add_chord">Add chord</string>
+    <string name="remove_beat">Remove beat</string>
+    <string name="add_beat">Add beat</string>
+    <string name="beat_text_hint">Text (optional)</string>
+    <string name="add_beat_group">Add Line</string>
 </resources>

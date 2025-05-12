@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_tutorialFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_tutorialFragment_to_createTutorialFragment"
+            app:destination="@id/createTutorialFragment" />
     </fragment>
 
     <fragment
@@ -63,13 +66,21 @@
             android:id="@+id/action_artistCreateFragment_to_songCreateFragment"
             app:destination="@id/songCreateFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/createTutorialFragment"
-        android:name="com.example.guitarapp.presentation.ui.tutorial.CreateTutorialFragment"
+        android:name="com.example.guitarapp.presentation.ui.tutorial.create.CreateTutorialFragment"
         android:label="CreateTutorialFragment" >
         <action
             android:id="@+id/action_createTutorialFragment_to_songCreateFragment"
             app:destination="@id/songCreateFragment" />
+        <argument
+            android:name="tutorialId"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <action
+            android:id="@+id/action_createTutorialFragment_to_tutorialFragment"
+            app:destination="@id/tutorialFragment" />
     </fragment>
 
 </navigation>

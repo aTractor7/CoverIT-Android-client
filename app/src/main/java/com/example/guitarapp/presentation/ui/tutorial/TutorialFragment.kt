@@ -212,6 +212,7 @@ class TutorialFragment : Fragment(){
         val sortedComments = comments.sortedByDescending { it.comments.size }
         binding.pbComments.visibility = View.GONE
         binding.rvComments.visibility = View.VISIBLE
+        binding.tvCommentsEmpty.visibility = View.GONE
         commentAdapter.submitList(sortedComments)
     }
 

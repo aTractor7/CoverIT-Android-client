@@ -4,5 +4,5 @@ data class BeatChord(
     val id: Int,
     val songBeatId: Int,
     val chord: Chord,
-    val recommendedFingering: Fingering
+    val recommendedFingering: Fingering?
 )

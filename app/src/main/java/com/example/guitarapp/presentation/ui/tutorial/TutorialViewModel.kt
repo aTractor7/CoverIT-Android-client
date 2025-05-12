@@ -7,6 +7,7 @@ import com.example.guitarapp.data.model.SongTutorial
 import com.example.guitarapp.data.model.SongTutorialCreate
 import com.example.guitarapp.data.remote.RetrofitInstanceWithToken
 import com.example.guitarapp.data.remote.SongTutorialApi
+import com.example.guitarapp.utils.CookieUtils
 import com.example.guitarapp.utils.Resource
 import com.google.gson.stream.MalformedJsonException
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,8 +26,8 @@ class TutorialViewModel(application: Application) :  AndroidViewModel(applicatio
     private val _tutorialState = MutableStateFlow<Resource<SongTutorial>>(Resource.Idle)
     val tutorialState: StateFlow<Resource<SongTutorial>> = _tutorialState
 
-    private val _tutorialCreateState = MutableStateFlow<Resource<SongTutorialCreate>>(Resource.Idle)
-    val tutorialCreateState: StateFlow<Resource<SongTutorialCreate>> = _tutorialCreateState
+    private val _tutorialCreateState = MutableStateFlow<Resource<Int>>(Resource.Idle)
+    val tutorialCreateState: StateFlow<Resource<Int>> = _tutorialCreateState
 
     fun fetchSongTutorial(tutorialId: Int) {
         viewModelScope.launch {
@@ -58,9 +59,11 @@ class TutorialViewModel(application: Application) :  AndroidViewModel(applicatio
             try{
                 val response = tutorialApi.createSongTutorial(tutorialCreate)
                 if(response.isSuccessful && response.body() != null) {
-                    var created: SongTutorialCreate = response.body()!!
+                    val cookieLocation = response.headers().values("Location")
 
-                    _tutorialCreateState.value = Resource.Success(created)
+                    val id =  cookieLocation.firstOrNull { it.contains("tutorials/") }
+                        ?.substringAfter("tutorials/")
+                    _tutorialCreateState.value = Resource.Success(id?.toIntOrNull()!!)
                 } else {
                     _tutorialCreateState.value = Resource.Error("Failed to create tutorial")
                 }

@@ -1,5 +1,6 @@
-package com.example.guitarapp.presentation.ui.tutorial
+package com.example.guitarapp.presentation.ui.tutorial.create
 
+import BeatGroupEditAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.guitarapp.MainActivity
 import com.example.guitarapp.R
 import com.example.guitarapp.data.model.Chord
+import com.example.guitarapp.data.model.SongBeat
+import com.example.guitarapp.data.model.SongBeatCreate
 import com.example.guitarapp.data.model.SongShort
 import com.example.guitarapp.data.model.SongTutorialCreate
 import com.example.guitarapp.databinding.FragmentTutorialCreateBinding
@@ -22,19 +26,17 @@ import com.example.guitarapp.presentation.ui.chord.ChordViewModel
 import com.example.guitarapp.presentation.ui.chord.ChordsSearchAdapter
 import com.example.guitarapp.presentation.ui.song.SongSearchAdapter
 import com.example.guitarapp.presentation.ui.song.SongViewModel
+import com.example.guitarapp.presentation.ui.tutorial.TutorialViewModel
 import com.example.guitarapp.utils.Resource
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import kotlinx.coroutines.flow.collectLatest
 
-//TODO: перше акорди треба виводити рядком а не знового кожен. Далі треба робити додавання бітів.
-
-
 class CreateTutorialFragment : Fragment() {
     private val tutorialViewModel: TutorialViewModel by viewModels {
         object : ViewModelProvider.Factory {
-            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return TutorialViewModel(requireActivity().application) as T
             }
         }
@@ -42,7 +44,7 @@ class CreateTutorialFragment : Fragment() {
 
     private val songViewModel: SongViewModel by viewModels {
         object : ViewModelProvider.Factory {
-            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return SongViewModel(requireActivity().application) as T
             }
         }
@@ -50,7 +52,7 @@ class CreateTutorialFragment : Fragment() {
 
     private val chordViewModel: ChordViewModel by viewModels {
         object : ViewModelProvider.Factory {
-            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return ChordViewModel(requireActivity().application) as T
             }
         }
@@ -62,10 +64,11 @@ class CreateTutorialFragment : Fragment() {
     private lateinit var songSearchAdapter: SongSearchAdapter
     private lateinit var chordSearchAdapter: ChordsSearchAdapter
     private lateinit var selectedChordsAdapter: SelectedChordsAdapter
-
+    private lateinit var beatGroupAdapter: BeatGroupEditAdapter
 
     private var selectedSong: SongShort? = null
     private val selectedChords = mutableListOf<Chord>()
+    private val beatGroups = mutableListOf<MutableList<SongBeatCreate>>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,6 +82,7 @@ class CreateTutorialFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupBeatEditor()
         setupAdapters()
         setupClickListeners()
         observeViewModels()
@@ -88,6 +92,52 @@ class CreateTutorialFragment : Fragment() {
                 showSearchViews()
             }
         }
+    }
+
+    private fun setupBeatEditor() {
+        // Ініціалізація з однією групою і одним пустим beat
+        beatGroups.add(mutableListOf(SongBeatCreate(null, 0, null, mutableListOf())))
+
+        // Спочатку створюємо адаптер
+        beatGroupAdapter = BeatGroupEditAdapter(
+            beatGroups = beatGroups,
+            selectedChords = selectedChords,
+            onAddBeat = { groupIndex ->
+                // Тепер beatGroupAdapter вже ініціалізований
+                beatGroupAdapter.addBeat(groupIndex)
+            },
+            onRemoveBeat = { groupIndex, beatIndex ->
+                beatGroupAdapter.removeBeat(groupIndex, beatIndex)
+            },
+            onAddGroup = {
+                beatGroupAdapter.addGroup()
+            },
+            onRemoveGroup = { groupIndex ->
+                beatGroupAdapter.removeGroup(groupIndex)
+            },
+            binding = binding
+        )
+
+        binding.rvBeatsContainer.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvBeatsContainer.adapter = beatGroupAdapter
+
+        binding.btnAddBeatGroup.setOnClickListener {
+            val lastGroup = beatGroups.lastOrNull()
+
+            if (lastGroup != null && lastGroup.isNotEmpty()) {
+                var nextBeat = lastGroup.last().beat + 1
+                val copiedGroup = lastGroup.map { beat ->
+                    beat.copy(beat = nextBeat++)
+                }.toMutableList()
+
+                beatGroups.add(copiedGroup)
+                beatGroupAdapter.notifyItemInserted(beatGroups.size - 1)
+            } else {
+                beatGroups.add(mutableListOf(SongBeatCreate(null, 0, null, mutableListOf())))
+                beatGroupAdapter.notifyItemInserted(beatGroups.size - 1)
+            }
+        }
+
     }
 
     private fun setupAdapters() {
@@ -101,7 +151,7 @@ class CreateTutorialFragment : Fragment() {
             hideSearchSongViews()
         }
 
-        chordSearchAdapter = ChordsSearchAdapter {chord ->
+        chordSearchAdapter = ChordsSearchAdapter { chord ->
             if (!selectedChords.any { it.id == chord.id }) {
                 selectedChords.add(chord)
                 selectedChordsAdapter.notifyItemInserted(selectedChords.size - 1)
@@ -109,7 +159,7 @@ class CreateTutorialFragment : Fragment() {
             clearSearchChords()
         }
 
-        selectedChordsAdapter = SelectedChordsAdapter(selectedChords) {chord ->
+        selectedChordsAdapter = SelectedChordsAdapter(selectedChords) { chord ->
             val index = selectedChords.indexOf(chord)
             selectedChords.remove(chord)
             selectedChordsAdapter.notifyItemRemoved(index)
@@ -193,7 +243,7 @@ class CreateTutorialFragment : Fragment() {
             tutorialViewModel.tutorialCreateState.collectLatest { state ->
                 when (state) {
                     is Resource.Loading -> showTutorialCreationLoading(true)
-                    is Resource.Success -> handleTutorialCreated()
+                    is Resource.Success -> handleTutorialCreated(state.data)
                     is Resource.NotAuthenticated -> handleAuthenticationError()
                     is Resource.Error -> showTutorialCreationError(state.message)
                     else -> {}
@@ -226,14 +276,21 @@ class CreateTutorialFragment : Fragment() {
         }
     }
 
-    private fun handleTutorialCreated() {
+    private fun handleTutorialCreated(id: Int) {
         showTutorialCreationLoading(false)
         Toast.makeText(
             requireContext(),
             getString(R.string.tutorial_created_successfully),
             Toast.LENGTH_SHORT
         ).show()
-        findNavController().popBackStack()
+
+        val args = Bundle().apply {
+            putInt("tutorialId", id)
+        }
+        findNavController().navigate(
+            R.id.action_createTutorialFragment_to_tutorialFragment,
+            args
+        )
     }
 
     private fun validateInput(): Boolean {
@@ -257,13 +314,19 @@ class CreateTutorialFragment : Fragment() {
     }
 
     private fun createTutorial(song: SongShort) {
+        for (beats in beatGroups) {
+            val lastBeat = beats.lastOrNull()
+            lastBeat?.text = (lastBeat.text ?: "") + " \n"
+        }
+        val allBeats = beatGroups.flatten()
+
         val tutorial = SongTutorialCreate(
             difficulty = binding.etDifficulty.text.toString(),
             description = binding.etDescription.text.toString().takeIf { it.isNotBlank() },
             backtrack = null,
             recommendedStrumming = binding.etStrumming.text.toString().takeIf { it.isNotBlank() },
             song = song,
-            beats = emptyList()
+            beats = allBeats
         )
         tutorialViewModel.createSongTutorial(tutorial)
     }
