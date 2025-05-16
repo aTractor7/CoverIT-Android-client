@@ -10,12 +10,14 @@ import androidx.annotation.UiContext
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.guitarapp.R
+import com.example.guitarapp.data.model.BeatChord
 import com.example.guitarapp.data.model.SongBeat
 import com.google.android.flexbox.FlexboxLayout
 import kotlin.text.toInt
 
 class BeatAdapter(
-    private val beats: List<SongBeat>
+    private val beats: List<SongBeat>,
+    private val onChordClick: (BeatChord, View) -> Unit
 ) : RecyclerView.Adapter<BeatAdapter.BeatViewHolder>() {
 
     inner class BeatViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -34,7 +36,6 @@ class BeatAdapter(
         val context = holder.itemView.context
 
         holder.flexChords.removeAllViews()
-
         setLayoutMinWidth(holder, beat.beatChords.size)
 
         for (chord in beat.beatChords) {
@@ -49,6 +50,10 @@ class BeatAdapter(
                     FlexboxLayout.LayoutParams.WRAP_CONTENT
                 ).apply {
                     setMargins(0, 0, 16, 8)
+                }
+
+                setOnClickListener { view ->
+                    onChordClick.invoke(chord, view)
                 }
             }
             holder.flexChords.addView(chordView)

@@ -95,15 +95,12 @@ class CreateTutorialFragment : Fragment() {
     }
 
     private fun setupBeatEditor() {
-        // Ініціалізація з однією групою і одним пустим beat
         beatGroups.add(mutableListOf(SongBeatCreate(null, 0, null, mutableListOf())))
 
-        // Спочатку створюємо адаптер
         beatGroupAdapter = BeatGroupEditAdapter(
             beatGroups = beatGroups,
             selectedChords = selectedChords,
             onAddBeat = { groupIndex ->
-                // Тепер beatGroupAdapter вже ініціалізований
                 beatGroupAdapter.addBeat(groupIndex)
             },
             onRemoveBeat = { groupIndex, beatIndex ->

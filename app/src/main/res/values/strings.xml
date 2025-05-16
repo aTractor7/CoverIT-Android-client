@@ -110,4 +110,9 @@
     <string name="add_beat">Add beat</string>
     <string name="beat_text_hint">Text (optional)</string>
     <string name="add_beat_group">Add Line</string>
+
+    <string name="fingering_img_description">Fingering image</string>
+    <string name="fingering_img_close">Close fingering image</string>
+    <string name="fingering_img_next">next fingering</string>
+    <string name="fingering_img_previous">previous fingering</string>
 </resources>

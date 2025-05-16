@@ -1,11 +1,18 @@
 package com.example.guitarapp.presentation.ui.tutorial
 
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.PopupWindow
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -17,12 +24,21 @@ import com.example.guitarapp.utils.Resource
 import kotlinx.coroutines.flow.collectLatest
 import kotlin.getValue
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
+import com.bumptech.glide.request.RequestOptions
 import com.example.guitarapp.R
+import com.example.guitarapp.data.model.BeatChord
 import com.example.guitarapp.data.model.Comment
 import com.example.guitarapp.data.model.CommentCreate
 import com.example.guitarapp.data.model.SongBeat
 import com.example.guitarapp.data.model.SongTutorial
 import com.example.guitarapp.presentation.ui.comment.CommentViewModel
+import com.example.guitarapp.presentation.ui.song.SongSearchAdapter
+import com.example.guitarapp.utils.Constants
+import com.example.guitarapp.utils.SessionInterceptor
+import okhttp3.OkHttpClient
 
 
 class TutorialFragment : Fragment(){
@@ -179,7 +195,9 @@ class TutorialFragment : Fragment(){
         binding.tvTutorialCreatedAt.text = tutorial.createdAt.toString()
 
         val groupedBeats = groupBeatsByNewline(tutorial.beats.sortedBy { it.beat })
-        val adapter = BeatGroupAdapter(groupedBeats)
+        val adapter = BeatGroupAdapter(groupedBeats) {beatChord, view ->
+            showChordPopup(beatChord, view)
+        }
         binding.rvBeatsContainer.layoutManager = LinearLayoutManager(requireContext())
         binding.rvBeatsContainer.adapter = adapter
 
@@ -191,6 +209,79 @@ class TutorialFragment : Fragment(){
             binding.tvCommentsEmpty.visibility = View.VISIBLE
         }
     }
+
+    private fun showChordPopup(chord: BeatChord, anchorView: View) {
+        val fingerings = chord.chord.fingerings ?: run {
+            Toast.makeText(requireContext(), "No image available for this chord", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (fingerings.isEmpty()) {
+            Toast.makeText(requireContext(), "No image available for this chord", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        var currentIndex = 0
+        val popupView = LayoutInflater.from(requireContext()).inflate(R.layout.chord_popup, null)
+
+        val popupWindow = PopupWindow(
+            popupView,
+            400,
+            300,
+            true
+        ).apply {
+            elevation = 10f
+            isOutsideTouchable = true
+        }
+
+        val imageView = popupView.findViewById<ImageView>(R.id.ivChordImage)
+        val closeButton = popupView.findViewById<ImageButton>(R.id.btnCloseChordImage)
+        val prevButton = popupView.findViewById<ImageButton>(R.id.btnPrevChord)
+        val nextButton = popupView.findViewById<ImageButton>(R.id.btnNextChord)
+
+        fun loadImage(index: Int) {
+            val imgPath = fingerings[index].imgPath
+            val chordImageUrl = Constants.BASE_URL + imgPath.substringAfter("/")
+
+            Glide.with(requireContext())
+                .load(GlideUrl(chordImageUrl, LazyHeaders.Builder().build()))
+                .into(imageView)
+
+            // Update arrow visibility
+            prevButton.visibility = if (index == 0) View.INVISIBLE else View.VISIBLE
+            nextButton.visibility = if (index == fingerings.size - 1) View.INVISIBLE else View.VISIBLE
+        }
+
+        // Initial load
+        loadImage(currentIndex)
+
+        closeButton.setOnClickListener { popupWindow.dismiss() }
+
+        prevButton.setOnClickListener {
+            if (currentIndex > 0) {
+                currentIndex--
+                loadImage(currentIndex)
+            }
+        }
+
+        nextButton.setOnClickListener {
+            if (currentIndex < fingerings.size - 1) {
+                currentIndex++
+                loadImage(currentIndex)
+            }
+        }
+
+        val location = IntArray(2)
+        anchorView.getLocationOnScreen(location)
+        popupWindow.showAtLocation(
+            binding.root,
+            Gravity.NO_GRAVITY,
+            location[0] - (popupWindow.width / 2) + (anchorView.width / 2),
+            location[1] - popupWindow.height - 16.dpToPx()
+        )
+    }
+
+    private fun Int.dpToPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
 
     private fun observeCommentsState() {
         lifecycleScope.launchWhenStarted {

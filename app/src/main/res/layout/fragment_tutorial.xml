@@ -145,11 +145,38 @@
             android:layout_marginTop="36dp"
             android:layout_marginEnd="284dp"
             android:text="@string/tutorial_label"
-            android:textColor="@color/darker2_color"
+            android:textColor="@color/darker1_color"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvTutorialAuthor" />
+
+        <FrameLayout
+            android:id="@+id/chordImageContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/ivChordImage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerInside"
+                android:background="@color/darker3_color"
+                android:contentDescription="Chord image" />
+
+            <ImageButton
+                android:id="@+id/btnCloseChordImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end|top"
+                android:layout_margin="8dp"
+                android:background="@drawable/icon_cancel"
+                android:contentDescription="Close chord image" />
+        </FrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvBeatsContainer"
@@ -248,4 +275,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
 </androidx.core.widget.NestedScrollView>
+

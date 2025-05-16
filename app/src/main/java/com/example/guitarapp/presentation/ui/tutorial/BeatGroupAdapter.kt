@@ -1,14 +1,17 @@
 package com.example.guitarapp.presentation.ui.tutorial
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.guitarapp.R
+import com.example.guitarapp.data.model.BeatChord
 import com.example.guitarapp.data.model.SongBeat
 
 class BeatGroupAdapter(
-    private val beatGroups: List<List<SongBeat>>
+    private val beatGroups: List<List<SongBeat>>,
+    private val onChordClick: (BeatChord, View) -> Unit
 ) : RecyclerView.Adapter<BeatGroupAdapter.BeatGroupViewHolder>() {
 
     inner class BeatGroupViewHolder(val recyclerView: RecyclerView) : RecyclerView.ViewHolder(recyclerView)
@@ -21,7 +24,7 @@ class BeatGroupAdapter(
 
     override fun onBindViewHolder(holder: BeatGroupViewHolder, position: Int) {
         val beatGroup = beatGroups[position]
-        holder.recyclerView.adapter = BeatAdapter(beatGroup)
+        holder.recyclerView.adapter = BeatAdapter(beatGroup, onChordClick)
     }
 
     override fun getItemCount(): Int = beatGroups.size
