@@ -48,4 +48,8 @@ object RetrofitInstanceWithToken {
     val chordApi: ChordApi by lazy {
         retrofit!!.create(ChordApi::class.java)
     }
+
+    val personalLibraryApi: PersonalLibraryApi by lazy {
+        retrofit!!.create(PersonalLibraryApi::class.java)
+    }
 }

@@ -151,6 +151,35 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvTutorialAuthor" />
 
+        <ImageButton
+            android:id="@+id/btnAddToLibrary"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="end|top"
+            android:layout_margin="8dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginTop="76dp"
+            android:background="@drawable/icon_like"
+            android:contentDescription="Add to Personal Library"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.943"
+            app:layout_constraintStart_toEndOf="@+id/tvTutorialLabel"
+            app:layout_constraintTop_toBottomOf="@+id/tvTutorialAuthor" />
+
+        <ImageButton
+            android:id="@+id/btnRemoveFromLibrary"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="end|top"
+            android:layout_margin="8dp"
+            android:visibility="gone"
+            android:background="@drawable/icon_dislike"
+            android:contentDescription="Romove from Personal Library"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.943"
+            app:layout_constraintStart_toEndOf="@+id/tvTutorialLabel"
+            app:layout_constraintTop_toBottomOf="@+id/tvTutorialAuthor" />
+
         <FrameLayout
             android:id="@+id/chordImageContainer"
             android:layout_width="match_parent"

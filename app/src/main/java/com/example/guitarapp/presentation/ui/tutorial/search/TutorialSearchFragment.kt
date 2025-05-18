@@ -14,9 +14,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.guitarapp.MainActivity
 import com.example.guitarapp.R
+import com.example.guitarapp.data.model.SongTutorialShort
 import com.example.guitarapp.databinding.FragmentTutorialSearchBinding
 import com.example.guitarapp.presentation.ui.profile.ProfileFragment
+import com.example.guitarapp.presentation.ui.tutorial.PersonalLibraryViewModel
 import com.example.guitarapp.utils.Resource
+import com.example.guitarapp.utils.SessionManager
 import kotlinx.coroutines.flow.collectLatest
 
 class TutorialSearchFragment : Fragment() {
@@ -27,9 +30,18 @@ class TutorialSearchFragment : Fragment() {
             }
         }
     }
+    private val personalLibraryViewModel: PersonalLibraryViewModel by viewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                return PersonalLibraryViewModel(requireActivity().application) as T
+            }
+        }
+    }
     private var _binding: FragmentTutorialSearchBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: TutorialShortAdapter
+    private lateinit var personalLibraryAdapter: TutorialShortAdapter
+    private lateinit var popularTutorialsAdapter: TutorialShortAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,28 +55,53 @@ class TutorialSearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupRecyclerView()
+        setupRecyclerViews()
         setupSearch()
         observeTutorials()
+        observePersonalLibraries()
 
+        personalLibraryViewModel.fetchPersonalLibrary(userId = SessionManager.getUserId(requireContext()))
         viewModel.fetchSongTutorials()
     }
 
-    private fun setupRecyclerView() {
+    private fun setupRecyclerViews() {
+        // Search results adapter
         adapter = TutorialShortAdapter { tutorial ->
-            val args = Bundle().apply {
-                putInt("tutorialId", tutorial.id)
+            navigateToTutorial(tutorial)
+        }.also {
+            binding.rvSearchResults.apply {
+                layoutManager = LinearLayoutManager(requireContext())
+                adapter = it
             }
-            findNavController().navigate(
-                R.id.action_tutorialSearchFragment_to_tutorialFragment,
-                args
-            )
         }
 
-        binding.rvTutorials.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = this@TutorialSearchFragment.adapter
+        personalLibraryAdapter = TutorialShortAdapter { tutorial ->
+            navigateToTutorial(tutorial)
+        }.also {
+            binding.rvPersonalLibrary.apply {
+                layoutManager = LinearLayoutManager(requireContext())
+                adapter = it
+            }
         }
+
+        popularTutorialsAdapter = TutorialShortAdapter { tutorial ->
+            navigateToTutorial(tutorial)
+        }.also {
+            binding.rvTutorials.apply {
+                layoutManager = LinearLayoutManager(requireContext())
+                adapter = it
+            }
+        }
+    }
+
+    private fun navigateToTutorial(tutorial: SongTutorialShort) {
+        val args = Bundle().apply {
+            putInt("tutorialId", tutorial.id)
+        }
+        findNavController().navigate(
+            R.id.action_tutorialSearchFragment_to_tutorialFragment,
+            args
+        )
     }
 
     private fun setupSearch() {
@@ -72,27 +109,76 @@ class TutorialSearchFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let {
                     viewModel.fetchSongTutorials(songTitle = it)
+                    showSearchResults(true)
                 }
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                // Опціонально: реалізація пошуку під час введення
+                if (newText.isNullOrEmpty()) {
+                    viewModel.fetchSongTutorials()
+                    showSearchResults(false)
+                }
                 return false
             }
         })
+    }
+
+    private fun showSearchResults(show: Boolean) {
+        if (show) {
+            binding.rvSearchResults.visibility = View.VISIBLE
+            binding.popularViewContainer.visibility = View.GONE
+            binding.libraryViewContainer.visibility = View.GONE
+        } else {
+            binding.rvSearchResults.visibility = View.GONE
+            binding.popularViewContainer.visibility = View.VISIBLE
+            binding.libraryViewContainer.visibility = View.VISIBLE
+        }
     }
 
     private fun observeTutorials() {
         lifecycleScope.launchWhenStarted {
             viewModel.tutorialPageState.collectLatest { state ->
                 when (state) {
-                    is Resource.Loading -> {
-                        // Показати лоадер, якщо потрібно
-                    }
                     is Resource.Success -> {
                         state.data.let { tutorials ->
-                            adapter.submitList(tutorials)
+                            if (binding.searchView.query.isNotEmpty()) {
+                                adapter.submitList(tutorials)
+                            } else {
+                                popularTutorialsAdapter.submitList(tutorials)
+                            }
+                        }
+                    }
+                    is Resource.NotAuthenticated -> {
+                        startLoginActivity()
+                        Toast.makeText(requireContext(), "Your session has expired.", Toast.LENGTH_LONG).show()
+                    }
+                    is Resource.Error -> {
+                        Toast.makeText(requireContext(), state.message ?: "Error", Toast.LENGTH_SHORT).show()
+                    }
+                    else -> {}
+                }
+            }
+        }
+    }
+
+    private fun observePersonalLibraries() {
+        lifecycleScope.launchWhenStarted {
+            personalLibraryViewModel.personalLibraryPageState.collectLatest { state ->
+                when (state) {
+                    is Resource.Loading -> {
+                        // Show loader if needed
+                    }
+                    is Resource.Success -> {
+                        state.data.let { personalLibraries ->
+                            if (personalLibraries.isNotEmpty()) {
+                                personalLibraryAdapter.submitList(personalLibraries.map { it.songTutorial })
+                                binding.tvPersonalLibraryTitle.visibility = View.VISIBLE
+                                binding.libraryViewContainer.visibility = View.VISIBLE
+                            } else {
+                                binding.tvPersonalLibraryTitle.visibility = View.GONE
+                                binding.libraryViewContainer.visibility = View.GONE
+                            }
                         }
                     }
                     is Resource.NotAuthenticated -> {
@@ -119,4 +205,3 @@ class TutorialSearchFragment : Fragment() {
         _binding = null
     }
 }
-

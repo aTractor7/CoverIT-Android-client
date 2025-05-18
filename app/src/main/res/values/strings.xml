@@ -49,7 +49,10 @@
     <string name="toolbar_item_name_instrument">Instrument</string>
 
     <string name="search_title">Tutorials</string>
+    <string name="search_results">Search result</string>
     <string name="search_no_results_found">No results found. Try another search.</string>
+    <string name="search_your_library">Your library</string>
+    <string name="search_popular_tutorials">Popular tutorials</string>
 
     <string name="create_artist_title">Create New Artist</string>
     <string name="artist_name_hint">Enter artist name</string>

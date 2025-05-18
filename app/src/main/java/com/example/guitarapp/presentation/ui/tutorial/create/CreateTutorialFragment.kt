@@ -33,6 +33,8 @@ import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import kotlinx.coroutines.flow.collectLatest
 
+//TODO: додати вибір аплікатури при створенні
+
 class CreateTutorialFragment : Fragment() {
     private val tutorialViewModel: TutorialViewModel by viewModels {
         object : ViewModelProvider.Factory {

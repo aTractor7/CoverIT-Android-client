@@ -32,12 +32,15 @@ import com.example.guitarapp.R
 import com.example.guitarapp.data.model.BeatChord
 import com.example.guitarapp.data.model.Comment
 import com.example.guitarapp.data.model.CommentCreate
+import com.example.guitarapp.data.model.PersonalLibraryCreate
 import com.example.guitarapp.data.model.SongBeat
 import com.example.guitarapp.data.model.SongTutorial
 import com.example.guitarapp.presentation.ui.comment.CommentViewModel
 import com.example.guitarapp.presentation.ui.song.SongSearchAdapter
+import com.example.guitarapp.presentation.ui.tutorial.PersonalLibraryViewModel
 import com.example.guitarapp.utils.Constants
 import com.example.guitarapp.utils.SessionInterceptor
+import com.example.guitarapp.utils.SessionManager
 import okhttp3.OkHttpClient
 
 
@@ -53,6 +56,13 @@ class TutorialFragment : Fragment(){
         object : ViewModelProvider.Factory {
             override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
                 return CommentViewModel(requireActivity().application) as T
+            }
+        }
+    }
+    private val personalLibraryViewModel: PersonalLibraryViewModel by viewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                return PersonalLibraryViewModel(requireActivity().application) as T
             }
         }
     }
@@ -75,6 +85,10 @@ class TutorialFragment : Fragment(){
 
     private lateinit var commentAdapter: CommentAdapter
 
+    private lateinit var btnAddToLibrary: ImageButton
+    private lateinit var btnRemoveFromLibrary: ImageButton
+
+    private var isInLibrary = false
     private var replyingToCommentId: Int = 0
 
     override fun onCreateView(
@@ -97,6 +111,7 @@ class TutorialFragment : Fragment(){
         if (!handleInvalidTutorialId(tutorialId)) return
 
         setupClickListeners()
+        setupLibraryButtons()
         observeTutorialState()
         viewModel.fetchSongTutorial(tutorialId)
     }
@@ -161,6 +176,27 @@ class TutorialFragment : Fragment(){
         }
     }
 
+    private fun setupLibraryButtons() {
+        btnAddToLibrary = binding.btnAddToLibrary
+        btnRemoveFromLibrary = binding.btnRemoveFromLibrary
+
+        btnAddToLibrary.setOnClickListener {
+            currentTutorial?.id?.let { tutorialId ->
+                personalLibraryViewModel.createPersonalLibrary(PersonalLibraryCreate(tutorialId))
+                observeLibraryState()
+            }
+        }
+
+        btnRemoveFromLibrary.setOnClickListener {
+            currentTutorial?.id?.let { tutorialId ->
+                personalLibraryViewModel.deletePersonalLibrary(tutorialId)
+                observeLibraryState()
+            }
+        }
+
+        checkLibraryStatus()
+    }
+
     private fun observeTutorialState() {
         lifecycleScope.launchWhenStarted {
             viewModel.tutorialState.collectLatest { state ->
@@ -207,6 +243,34 @@ class TutorialFragment : Fragment(){
             binding.pbComments.visibility = View.GONE
             binding.rvComments.visibility = View.GONE
             binding.tvCommentsEmpty.visibility = View.VISIBLE
+        }
+    }
+
+    private fun observeLibraryState() {
+        lifecycleScope.launchWhenStarted {
+            personalLibraryViewModel.personalLibraryPageState.collectLatest { state ->
+                when (state) {
+                    is Resource.Loading -> {
+                        // Show loading if needed
+                    }
+                    is Resource.Success -> {
+                        val tutorialId = arguments?.getInt(ARG_TUTORIAL_ID, -1) ?: -1
+                        isInLibrary = state.data.any { it.songTutorial.id == tutorialId }
+                        updateLibraryButtons()
+                    }
+                    is Resource.NotAuthenticated -> handleAuthenticationError()
+                    is Resource.Error -> showError(state.message)
+                    else -> {}
+                }
+            }
+        }
+    }
+
+    private fun checkLibraryStatus() {
+        val tutorialId = arguments?.getInt(ARG_TUTORIAL_ID, -1) ?: -1
+        if (tutorialId != -1) {
+            personalLibraryViewModel.fetchPersonalLibrary(userId = SessionManager.getUserId(requireContext()))
+            observeLibraryState()
         }
     }
 
@@ -279,6 +343,16 @@ class TutorialFragment : Fragment(){
             location[0] - (popupWindow.width / 2) + (anchorView.width / 2),
             location[1] - popupWindow.height - 16.dpToPx()
         )
+    }
+
+    private fun updateLibraryButtons() {
+        if (isInLibrary) {
+            btnAddToLibrary.visibility = View.GONE
+            btnRemoveFromLibrary.visibility = View.VISIBLE
+        } else {
+            btnAddToLibrary.visibility = View.VISIBLE
+            btnRemoveFromLibrary.visibility = View.GONE
+        }
     }
 
     private fun Int.dpToPx(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
