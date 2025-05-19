@@ -1,5 +1,9 @@
 package com.example.guitarapp.data.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class UserDto(
     val id: Int,
     val username: String,
@@ -10,7 +14,7 @@ data class UserDto(
     val skill: String,
     val instrument: String?,
     val bio: String?
-){
+) : Parcelable{
     companion object {
         fun empty() = UserDto(
             id = 0,

@@ -2,6 +2,7 @@
     <string name="app_name">CoverIT</string>
     <string name="create_button">Create</string>
     <string name="update_button">Update</string>
+    <string name="edit">Edit</string>
 
     <string name="login_username_hint">Username</string>
     <string name="login_password_hint">Password</string>
@@ -84,6 +85,7 @@
     <string name="song_remove_artist_icon_description">Remove selected artist</string>
 
     <string name="create_tutorial_title">Create New Tutorial</string>
+    <string name="update_tutorial_title">Update Tutorial</string>
     <string name="song_search_label">Choose the song you want to make a tutorial for</string>
     <string name="song_search_hint">Enter song title</string>
     <string name="search">Search</string>

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
@@ -21,6 +22,7 @@ import com.example.guitarapp.data.model.Chord
 import com.example.guitarapp.data.model.SongBeat
 import com.example.guitarapp.data.model.SongBeatCreate
 import com.example.guitarapp.data.model.SongShort
+import com.example.guitarapp.data.model.SongTutorial
 import com.example.guitarapp.data.model.SongTutorialCreate
 import com.example.guitarapp.databinding.FragmentTutorialCreateBinding
 import com.example.guitarapp.presentation.ui.chord.ChordViewModel
@@ -71,6 +73,16 @@ class CreateTutorialFragment : Fragment() {
     private var selectedSong: SongShort? = null
     private val selectedChords = mutableListOf<Chord>()
     private val beatGroups = mutableListOf<MutableList<SongBeatCreate>>()
+    private var existingTutorial: SongTutorial? = null
+    private var isUpdateMode = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            existingTutorial = it.getParcelable<SongTutorial>("songTutorial")
+            isUpdateMode = existingTutorial != null
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,12 +101,91 @@ class CreateTutorialFragment : Fragment() {
         setupClickListeners()
         observeViewModels()
 
-        binding.etSongSearch.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus && selectedSong == null) {
-                showSearchViews()
+        if (isUpdateMode) {
+            setupUpdateMode()
+        } else {
+            binding.etSongSearch.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus && selectedSong == null) {
+                    showSearchViews()
+                }
             }
         }
     }
+
+    private fun setupUpdateMode() {
+        existingTutorial?.let { tutorial ->
+            // Змінюємо заголовок на "Update Tutorial"
+            binding.tvCreateTutorialTitle.text = getString(R.string.update_tutorial_title)
+
+            // Set song info (block selection)
+            selectedSong = tutorial.song
+
+            // Оновлюємо відображення обраної пісні (без кнопки видалення)
+            binding.tvSongSearchLabel.text = getString(R.string.tutorial_covered_song)
+            binding.llSelectedSong.visibility = View.VISIBLE
+            binding.tvSelectedSongTitle.text = tutorial.song.title
+            binding.btnRemoveSelectedSong.visibility = View.GONE // Ховаємо кнопку видалення
+            binding.etSongSearch.visibility = View.GONE
+            binding.btnSearchSong.visibility = View.GONE
+            val params = binding.tvDifficultyLabel.layoutParams as ConstraintLayout.LayoutParams
+            params.topToBottom = binding.llSelectedSong.id
+            binding.tvDifficultyLabel.layoutParams = params
+
+            // Set basic info
+            binding.etDifficulty.setText(tutorial.difficulty)
+            binding.etDescription.setText(tutorial.description ?: "")
+            binding.etStrumming.setText(tutorial.recommendedStrumming ?: "")
+
+            // Set chords - тільки унікальні акорди
+            selectedChords.clear()
+            selectedChords.addAll(
+                tutorial.beats.flatMap { beat ->
+                    beat.beatChords.map { it.chord }
+                }.distinctBy { it.id } // Беремо тільки унікальні акорди по id
+            )
+            selectedChordsAdapter.notifyDataSetChanged()
+
+            // Set beats - групуюємо по наявності \n в тексті
+            beatGroups.clear()
+            var currentGroup = mutableListOf<SongBeatCreate>()
+
+            tutorial.beats.sortedBy { it.beat }.forEach { beat ->
+                currentGroup.add(
+                    SongBeatCreate(
+                        text = beat.text,
+                        beat = beat.beat,
+                        comment = beat.comment,
+                        beatChords = beat.beatChords.map { beatChord ->
+                            BeatChord(
+                                id = beatChord.id,
+                                songBeatId = beatChord.songBeatId,
+                                chord = beatChord.chord.copy(),
+                                recommendedFingering = beatChord.recommendedFingering?.copy()
+                            )
+                        }.toMutableList()
+                    )
+                )
+
+                // Якщо текст містить \n - починаємо нову групу
+                if (beat.text?.contains("\n") == true) {
+                    beatGroups.add(currentGroup)
+                    currentGroup = mutableListOf()
+                }
+            }
+
+            // Додаємо останню групу, якщо вона не пуста
+            if (currentGroup.isNotEmpty()) {
+                beatGroups.add(currentGroup)
+            }
+
+            beatGroupAdapter.notifyDataSetChanged()
+
+            // Change button text
+            binding.btnCreateTutorial.text = getString(R.string.update_button)
+        }
+    }
+
+
 
     private fun setupBeatEditor() {
         beatGroups.add(mutableListOf(SongBeatCreate(null, 0, null, mutableListOf())))
@@ -209,7 +300,11 @@ class CreateTutorialFragment : Fragment() {
         binding.btnCreateTutorial.setOnClickListener {
             selectedSong?.let { song ->
                 if (validateInput()) {
-                    createTutorial(song)
+                    if (isUpdateMode) {
+                        updateTutorial(song)
+                    } else {
+                        createTutorial(song)
+                    }
                 }
             } ?: run {
                 Toast.makeText(
@@ -342,6 +437,50 @@ class CreateTutorialFragment : Fragment() {
         tutorialViewModel.createSongTutorial(tutorial)
     }
 
+    private fun updateTutorial(song: SongShort) {
+        for (beats in beatGroups) {
+            val lastBeat = beats.lastOrNull()
+            lastBeat?.text = (lastBeat.text ?: "") + " \n"
+        }
+        val allBeats = beatGroups.flatten()
+
+        existingTutorial?.let { originalTutorial ->
+            val updatedTutorial = originalTutorial.copy(
+                difficulty = binding.etDifficulty.text.toString(),
+                description = binding.etDescription.text.toString().takeIf { it.isNotBlank() },
+                recommendedStrumming = binding.etStrumming.text.toString().takeIf { it.isNotBlank() },
+                beats = allBeats.mapIndexed { index, beatCreate ->
+                    // Знаходимо оригінальний beat за beat або індексом
+                    val originalBeat = originalTutorial.beats.find { it.beat == beatCreate.beat }
+                        ?: originalTutorial.beats.getOrNull(index)
+
+                    SongBeat(
+                        id = originalBeat?.id ?: 0, // Беремо id з оригінального tutorial
+                        text = beatCreate.text,
+                        beat = beatCreate.beat,
+                        comment = beatCreate.comment,
+                        songTutorialId = originalTutorial.id,
+                        beatChords = beatCreate.beatChords.map { beatChordCreate ->
+                            // Знаходимо оригінальний beatChord за chord.id
+                            val originalBeatChord = originalBeat?.beatChords?.find {
+                                it.chord.id == beatChordCreate.chord.id
+                            }
+
+                            BeatChord(
+                                id = originalBeatChord?.id ?: 0, // Беремо id з оригінального tutorial
+                                songBeatId = originalBeat?.id ?: 0,
+                                chord = beatChordCreate.chord.copy(),
+                                recommendedFingering = beatChordCreate.recommendedFingering?.copy()
+                            )
+                        }
+                    )
+                }
+            )
+            tutorialViewModel.updateSongTutorial(updatedTutorial)
+        }
+    }
+
+
     private fun clearSelectedSong() {
         selectedSong = null
         binding.llSelectedSong.visibility = View.INVISIBLE
@@ -421,5 +560,13 @@ class CreateTutorialFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        fun newInstance(tutorial: SongTutorial? = null) = CreateTutorialFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable("songTutorial", tutorial)
+            }
+        }
     }
 }

@@ -139,6 +139,23 @@
             app:layout_constraintStart_toEndOf="@+id/tvTutorialCreatedAtLabel" />
 
         <TextView
+            android:id="@+id/tvEditTutorial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/edit"
+            android:visibility="gone"
+            android:textColor="@color/darker2_color"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/btnAddToLibrary"
+            app:layout_constraintHorizontal_bias="0.081"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTutorialAuthor" />
+
+        <TextView
             android:id="@+id/tvTutorialLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -1,5 +1,9 @@
 package com.example.guitarapp.data.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class SongTutorial(
     val id: Int,
     val difficulty: String,
@@ -11,4 +15,4 @@ data class SongTutorial(
     val song: SongShort,
     val beats: List<SongBeat>,
     val comments: List<Comment>
-)
+) : Parcelable

@@ -13,6 +13,7 @@ import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -113,6 +114,7 @@ class TutorialFragment : Fragment(){
 
         setupClickListeners()
         setupLibraryButtons()
+        setupEditButton()
         observeTutorialState()
         viewModel.fetchSongTutorial(tutorialId)
     }
@@ -198,6 +200,20 @@ class TutorialFragment : Fragment(){
         checkLibraryStatus()
     }
 
+    private fun setupEditButton() {
+        val tvEdit = binding.tvEditTutorial
+        tvEdit.visibility = View.GONE
+
+        tvEdit.setOnClickListener {
+            currentTutorial?.let { tutorial ->
+                findNavController().navigate(
+                    R.id.action_tutorialFragment_to_createTutorialFragment,
+                    bundleOf("songTutorial" to tutorial)
+                )
+            }
+        }
+    }
+
     private fun observeTutorialState() {
         lifecycleScope.launchWhenStarted {
             viewModel.tutorialState.collectLatest { state ->
@@ -244,6 +260,12 @@ class TutorialFragment : Fragment(){
             binding.pbComments.visibility = View.GONE
             binding.rvComments.visibility = View.GONE
             binding.tvCommentsEmpty.visibility = View.VISIBLE
+        }
+
+        binding.tvEditTutorial.visibility = if (SessionManager.getUserId(requireContext()) == tutorial.tutorialAuthor.id) {
+            View.VISIBLE
+        } else {
+            View.GONE
         }
     }
 
@@ -425,7 +447,7 @@ class TutorialFragment : Fragment(){
                 }
 
                 //Todo: змінити тут константу на залежний від ширини екрану розмір
-                if (beat.text.endsWith("\n") || currentGroup.sumOf { it.text.length } > 40) {
+                if (beat.text.endsWith("\n") || currentGroup.sumOf { it.text?.length ?: 0 } > 40) {
                     result.add(currentGroup.toList())
                     currentGroup.clear()
                 }

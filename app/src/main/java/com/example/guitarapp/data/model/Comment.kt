@@ -1,5 +1,9 @@
 package com.example.guitarapp.data.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Comment(
     val id: Int,
     val text: String,
@@ -8,7 +12,7 @@ data class Comment(
     val songTutorial: SongTutorialShort,
     val idAnswerOn: Int,
     val comments: List<Comment>
-){
+): Parcelable{
     companion object {
         fun empty() = Comment(
             id = 0,

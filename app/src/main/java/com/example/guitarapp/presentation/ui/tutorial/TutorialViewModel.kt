@@ -83,13 +83,13 @@ class TutorialViewModel(application: Application) :  AndroidViewModel(applicatio
         viewModelScope.launch {
             _tutorialCreateState.value = Resource.Loading
             try{
-                val response = tutorialApi.updateSongTutorial(tutorialCreate)
+                val response = tutorialApi.updateSongTutorial(
+                    tutorialId = tutorialCreate.id,
+                    songTutorial = tutorialCreate)
                 if(response.isSuccessful && response.body() != null) {
-                    val cookieLocation = response.headers().values("Location")
+                    val tutorial = response.body()
 
-                    val id =  cookieLocation.firstOrNull { it.contains("tutorials/") }
-                        ?.substringAfter("tutorials/")
-                    _tutorialCreateState.value = Resource.Success(id?.toIntOrNull()!!)
+                    _tutorialCreateState.value = Resource.Success(tutorial?.id ?: tutorialCreate.id)
                 } else {
                     _tutorialCreateState.value = Resource.Error("Failed to update tutorial")
                 }

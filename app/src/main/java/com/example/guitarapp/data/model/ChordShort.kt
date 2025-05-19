@@ -4,8 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Fingering(
+data class ChordShort(
     val id: Int,
-    val imgPath: String,
-    val chordShort: ChordShort
+    val name: String
 ): Parcelable

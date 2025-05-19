@@ -30,8 +30,9 @@ interface SongTutorialApi {
         @Body songTutorialCreate: SongTutorialCreate
     ): Response<SongTutorialCreate>
 
-    @PUT("tutorials")
+    @PUT("tutorials/{id}")
     suspend fun updateSongTutorial(
+        @Path("id") tutorialId: Int,
         @Body songTutorial: SongTutorial
     ): Response<SongTutorial>
 }
