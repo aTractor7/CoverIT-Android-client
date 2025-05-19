@@ -7,6 +7,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -28,4 +29,9 @@ interface SongTutorialApi {
     suspend fun createSongTutorial(
         @Body songTutorialCreate: SongTutorialCreate
     ): Response<SongTutorialCreate>
+
+    @PUT("tutorials")
+    suspend fun updateSongTutorial(
+        @Body songTutorial: SongTutorial
+    ): Response<SongTutorial>
 }

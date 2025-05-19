@@ -32,6 +32,7 @@ import com.example.guitarapp.R
 import com.example.guitarapp.data.model.BeatChord
 import com.example.guitarapp.data.model.Comment
 import com.example.guitarapp.data.model.CommentCreate
+import com.example.guitarapp.data.model.Fingering
 import com.example.guitarapp.data.model.PersonalLibraryCreate
 import com.example.guitarapp.data.model.SongBeat
 import com.example.guitarapp.data.model.SongTutorial
@@ -285,6 +286,11 @@ class TutorialFragment : Fragment(){
             return
         }
 
+        val fingeringsList: List<Fingering> = buildList {
+            chord.recommendedFingering?.let { add(it) }
+            addAll(fingerings)
+        }.distinctBy { it.id }
+
         var currentIndex = 0
         val popupView = LayoutInflater.from(requireContext()).inflate(R.layout.chord_popup, null)
 
@@ -304,7 +310,8 @@ class TutorialFragment : Fragment(){
         val nextButton = popupView.findViewById<ImageButton>(R.id.btnNextChord)
 
         fun loadImage(index: Int) {
-            val imgPath = fingerings[index].imgPath
+            val imgPath = fingeringsList[index].imgPath
+
             val chordImageUrl = Constants.BASE_URL + imgPath.substringAfter("/")
 
             Glide.with(requireContext())
@@ -313,7 +320,7 @@ class TutorialFragment : Fragment(){
 
             // Update arrow visibility
             prevButton.visibility = if (index == 0) View.INVISIBLE else View.VISIBLE
-            nextButton.visibility = if (index == fingerings.size - 1) View.INVISIBLE else View.VISIBLE
+            nextButton.visibility = if (index == fingeringsList.size - 1) View.INVISIBLE else View.VISIBLE
         }
 
         // Initial load
@@ -406,20 +413,22 @@ class TutorialFragment : Fragment(){
 
             val isLast = i == sortedBeats.lastIndex
 
-            if (beat.text != "" && !beat.text.endsWith(" ") && !beat.text.endsWith("\n") && !isLast) {
-                val updatedBeat = beat.copy(text = beat.text + "-")
-                val nextOriginal = sortedBeats[i + 1]
-                nextBeat = nextOriginal.copy(text = "-" + nextOriginal.text)
+            if(beat.text != null) {
+                if (beat.text != "" && !beat.text.endsWith(" ") && !beat.text.endsWith("\n") && !isLast) {
+                    val updatedBeat = beat.copy(text = beat.text + "-")
+                    val nextOriginal = sortedBeats[i + 1]
+                    nextBeat = nextOriginal.copy(text = "-" + nextOriginal.text)
 
-                currentGroup.add(updatedBeat)
-            } else {
-                currentGroup.add(beat)
-            }
+                    currentGroup.add(updatedBeat)
+                } else {
+                    currentGroup.add(beat)
+                }
 
-            //Todo: змінити тут константу на залежний від ширини екрану розмір
-            if (beat.text.endsWith("\n") || currentGroup.sumOf { it.text.length } > 40) {
-                result.add(currentGroup.toList())
-                currentGroup.clear()
+                //Todo: змінити тут константу на залежний від ширини екрану розмір
+                if (beat.text.endsWith("\n") || currentGroup.sumOf { it.text.length } > 40) {
+                    result.add(currentGroup.toList())
+                    currentGroup.clear()
+                }
             }
         }
 

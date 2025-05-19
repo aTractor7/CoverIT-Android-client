@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.guitarapp.MainActivity
 import com.example.guitarapp.R
 import com.example.guitarapp.data.model.SongTutorialShort
@@ -65,33 +66,20 @@ class TutorialSearchFragment : Fragment() {
     }
 
     private fun setupRecyclerViews() {
-        // Search results adapter
-        adapter = TutorialShortAdapter { tutorial ->
-            navigateToTutorial(tutorial)
-        }.also {
-            binding.rvSearchResults.apply {
-                layoutManager = LinearLayoutManager(requireContext())
-                adapter = it
+        fun createAdapterAndSetToRecyclerView(recyclerView: RecyclerView): TutorialShortAdapter {
+            return TutorialShortAdapter { tutorial ->
+                navigateToTutorial(tutorial)
+            }.also {
+                recyclerView.apply {
+                    layoutManager = LinearLayoutManager(requireContext())
+                    adapter = it
+                }
             }
         }
 
-        personalLibraryAdapter = TutorialShortAdapter { tutorial ->
-            navigateToTutorial(tutorial)
-        }.also {
-            binding.rvPersonalLibrary.apply {
-                layoutManager = LinearLayoutManager(requireContext())
-                adapter = it
-            }
-        }
-
-        popularTutorialsAdapter = TutorialShortAdapter { tutorial ->
-            navigateToTutorial(tutorial)
-        }.also {
-            binding.rvTutorials.apply {
-                layoutManager = LinearLayoutManager(requireContext())
-                adapter = it
-            }
-        }
+        adapter = createAdapterAndSetToRecyclerView(binding.rvSearchResults)
+        personalLibraryAdapter = createAdapterAndSetToRecyclerView(binding.rvPersonalLibrary)
+        popularTutorialsAdapter = createAdapterAndSetToRecyclerView(binding.rvTutorials)
     }
 
     private fun navigateToTutorial(tutorial: SongTutorialShort) {

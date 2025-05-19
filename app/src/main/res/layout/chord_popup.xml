@@ -10,6 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
+        android:clickable="true"
+        android:focusable="true"
         android:background="@color/darker1_color"
         android:contentDescription="@string/fingering_img_description" />
 

@@ -78,4 +78,30 @@ class TutorialViewModel(application: Application) :  AndroidViewModel(applicatio
             }
         }
     }
+
+    fun updateSongTutorial(tutorialCreate: SongTutorial) {
+        viewModelScope.launch {
+            _tutorialCreateState.value = Resource.Loading
+            try{
+                val response = tutorialApi.updateSongTutorial(tutorialCreate)
+                if(response.isSuccessful && response.body() != null) {
+                    val cookieLocation = response.headers().values("Location")
+
+                    val id =  cookieLocation.firstOrNull { it.contains("tutorials/") }
+                        ?.substringAfter("tutorials/")
+                    _tutorialCreateState.value = Resource.Success(id?.toIntOrNull()!!)
+                } else {
+                    _tutorialCreateState.value = Resource.Error("Failed to update tutorial")
+                }
+            } catch (e: MalformedJsonException) {
+                _tutorialCreateState.value = Resource.NotAuthenticated
+            } catch (e: SocketTimeoutException) {
+                _tutorialCreateState.value = Resource.Error("Connection timeout")
+            } catch (e: IOException) {
+                _tutorialCreateState.value = Resource.Error("Network unavailable")
+            } catch (e: Exception) {
+                _tutorialCreateState.value = Resource.Error("Error: ${e.localizedMessage}")
+            }
+        }
+    }
 }

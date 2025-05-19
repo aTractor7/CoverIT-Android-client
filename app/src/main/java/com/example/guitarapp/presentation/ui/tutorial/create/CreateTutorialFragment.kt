@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.guitarapp.MainActivity
 import com.example.guitarapp.R
+import com.example.guitarapp.data.model.BeatChord
 import com.example.guitarapp.data.model.Chord
 import com.example.guitarapp.data.model.SongBeat
 import com.example.guitarapp.data.model.SongBeatCreate
@@ -32,8 +33,7 @@ import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import kotlinx.coroutines.flow.collectLatest
-
-//TODO: додати вибір аплікатури при створенні
+import kotlin.String
 
 class CreateTutorialFragment : Fragment() {
     private val tutorialViewModel: TutorialViewModel by viewModels {
@@ -126,7 +126,19 @@ class CreateTutorialFragment : Fragment() {
             if (lastGroup != null && lastGroup.isNotEmpty()) {
                 var nextBeat = lastGroup.last().beat + 1
                 val copiedGroup = lastGroup.map { beat ->
-                    beat.copy(beat = nextBeat++)
+                    SongBeatCreate(
+                        text = beat.text,
+                        beat = nextBeat++,
+                        comment = null,
+                        beatChords = beat.beatChords.map { beatChord ->
+                            BeatChord(
+                                id = beatChord.id,
+                                songBeatId = beatChord.songBeatId,
+                                chord = beatChord.chord.copy(),
+                                recommendedFingering = beatChord.recommendedFingering?.copy()
+                            )
+                        }.toMutableList()
+                    )
                 }.toMutableList()
 
                 beatGroups.add(copiedGroup)

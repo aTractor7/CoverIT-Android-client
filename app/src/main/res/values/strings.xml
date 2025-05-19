@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">CoverIT</string>
     <string name="create_button">Create</string>
+    <string name="update_button">Update</string>
 
     <string name="login_username_hint">Username</string>
     <string name="login_password_hint">Password</string>
