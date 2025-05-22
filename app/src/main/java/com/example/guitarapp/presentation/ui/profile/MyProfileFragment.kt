@@ -7,11 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.guitarapp.MainActivity
+import com.example.guitarapp.R
 import com.example.guitarapp.data.model.UserDto
 import com.example.guitarapp.databinding.FragmentProfileBinding
 import com.example.guitarapp.utils.Resource
@@ -30,6 +33,8 @@ class MyProfileFragment: Fragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
 
+    private var currentUser: UserDto? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,6 +46,15 @@ class MyProfileFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.fetchAuthenticatedUserProfile()
 
+        val tvEdit = binding.tvEditProfile
+        tvEdit.setOnClickListener {
+            currentUser?.let { user ->
+                findNavController().navigate(
+                    R.id.action_myProfileFragment_to_editProfileFragment,
+                    bundleOf("user" to user)
+                )
+            }
+        }
 
         lifecycleScope.launchWhenStarted {
             viewModel.profileState.collectLatest { state ->
@@ -50,7 +64,7 @@ class MyProfileFragment: Fragment() {
                     }
                     is Resource.Success -> {
                         val user = state.data
-
+                        currentUser = user
                         showUserData(user)
                     }
                     is Resource.NotAuthenticated -> {
@@ -80,7 +94,6 @@ class MyProfileFragment: Fragment() {
             binding.ivProfileImg.setImageBitmap(bmp)
         }
 
-        binding.tvEditProfile.isClickable = true
         binding.tvEditProfile.visibility = View.VISIBLE
     }
 

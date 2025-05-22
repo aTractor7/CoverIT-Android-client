@@ -72,4 +72,28 @@ class ProfileViewModel(application: Application) :  AndroidViewModel(application
             }
         }
     }
+
+    fun updateUserProfile(id: Int, userDto: UserDto) {
+        viewModelScope.launch {
+            _profileState.value = Resource.Loading
+            try {
+                val response = userApi.updateUserProfile(id, userDto)
+                if (response.isSuccessful && response.body() != null) {
+                    var userDto: UserDto = response.body()!!
+
+                    _profileState.value = Resource.Success(userDto)
+                } else {
+                    _profileState.value = Resource.Error("Failed to update profile")
+                }
+            } catch (e: MalformedJsonException) {
+                _profileState.value = Resource.NotAuthenticated
+            } catch (e: SocketTimeoutException) {
+                _profileState.value = Resource.Error("Connection timeout")
+            } catch (e: IOException) {
+                _profileState.value = Resource.Error("Network unavailable")
+            } catch (e: Exception) {
+                _profileState.value = Resource.Error("Error: ${e.localizedMessage}")
+            }
+        }
+    }
 }

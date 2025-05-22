@@ -7,12 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.guitarapp.MainActivity
+import com.example.guitarapp.R
 import com.example.guitarapp.data.model.UserDto
 import com.example.guitarapp.databinding.FragmentProfileBinding
 import com.example.guitarapp.presentation.ui.BaseActivity

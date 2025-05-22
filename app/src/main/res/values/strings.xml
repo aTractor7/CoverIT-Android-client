@@ -31,6 +31,8 @@
     <string name="profile_bio_label">BIO</string>
     <string name="profile_join_since">Join since</string>
     <string name="profile_edit">Edit profile</string>
+    <string name="profile_edit_fail">Profile update failed</string>
+
 
     <string name="tutorial_description_label">Description: </string>
     <string name="tutorial_strumming_label">Recommended strumming: </string>
