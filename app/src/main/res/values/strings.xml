@@ -123,4 +123,5 @@
     <string name="fingering_img_close">Close fingering image</string>
     <string name="fingering_img_next">next fingering</string>
     <string name="fingering_img_previous">previous fingering</string>
+    <string name="chordpedia_label">Chordpedia</string>
 </resources>

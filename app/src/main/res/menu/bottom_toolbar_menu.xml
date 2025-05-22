@@ -9,7 +9,7 @@
         android:title="@string/toolbar_item_name_create_cover"
         android:icon="@drawable/icon_brush"/>
 
-    <item android:id="@+id/instrumentFragment"
+    <item android:id="@+id/chordsFragment"
         android:title="@string/toolbar_item_name_instrument"
         android:icon="@drawable/icon_instrument"/>
 

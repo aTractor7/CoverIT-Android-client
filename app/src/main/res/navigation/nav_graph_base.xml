@@ -94,5 +94,9 @@
             android:id="@+id/action_editProfileFragment_to_myProfileFragment"
             app:destination="@id/myProfileFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/chordsFragment"
+        android:name="com.example.guitarapp.presentation.ui.chord.ChordsFragment"
+        android:label="ChordsFragment" />
 
 </navigation>
