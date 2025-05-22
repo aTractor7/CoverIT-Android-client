@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/tutorialFragment"
-        android:name="com.example.guitarapp.presentation.ui.tutorial.TutorialFragment"
+        android:name="com.example.guitarapp.presentation.ui.fragments.TutorialFragment"
         android:label="Tutorial"
         tools:layout="@layout/fragment_tutorial">
         <action
@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.guitarapp.presentation.ui.profile.ProfileFragment"
+        android:name="com.example.guitarapp.presentation.ui.fragments.ProfileFragment"
         android:label="Profile"
         tools:layout="@layout/fragment_profile">
         <argument
@@ -33,7 +33,7 @@
 
     <fragment
         android:id="@+id/tutorialSearchFragment"
-        android:name="com.example.guitarapp.presentation.ui.tutorial.search.TutorialSearchFragment"
+        android:name="com.example.guitarapp.presentation.ui.fragments.TutorialSearchFragment"
         android:label="Search Tutorials" >
         <argument
             android:name="tutorialId"
@@ -45,7 +45,7 @@
     </fragment>
     <fragment
         android:id="@+id/myProfileFragment"
-        android:name="com.example.guitarapp.presentation.ui.profile.MyProfileFragment"
+        android:name="com.example.guitarapp.presentation.ui.fragments.MyProfileFragment"
         android:label="MyProfileFragment" >
         <action
             android:id="@+id/action_myProfileFragment_to_editProfileFragment"
@@ -53,7 +53,7 @@
     </fragment>
     <fragment
         android:id="@+id/songCreateFragment"
-        android:name="com.example.guitarapp.presentation.ui.song.SongCreateFragment"
+        android:name="com.example.guitarapp.presentation.ui.fragments.SongCreateFragment"
         android:label="SongCreateFragment" >
         <action
             android:id="@+id/action_songCreateFragment_to_artistCreateFragment"
@@ -64,7 +64,7 @@
     </fragment>
     <fragment
         android:id="@+id/artistCreateFragment"
-        android:name="com.example.guitarapp.presentation.ui.artist.ArtistCreateFragment"
+        android:name="com.example.guitarapp.presentation.ui.fragments.ArtistCreateFragment"
         android:label="ArtistCreateFragment" >
         <action
             android:id="@+id/action_artistCreateFragment_to_songCreateFragment"
@@ -73,7 +73,7 @@
 
     <fragment
         android:id="@+id/createTutorialFragment"
-        android:name="com.example.guitarapp.presentation.ui.tutorial.create.CreateTutorialFragment"
+        android:name="com.example.guitarapp.presentation.ui.fragments.CreateTutorialFragment"
         android:label="CreateTutorialFragment" >
         <action
             android:id="@+id/action_createTutorialFragment_to_songCreateFragment"
@@ -96,7 +96,7 @@
     </fragment>
     <fragment
         android:id="@+id/chordsFragment"
-        android:name="com.example.guitarapp.presentation.ui.chord.ChordsFragment"
+        android:name="com.example.guitarapp.presentation.ui.fragments.ChordsFragment"
         android:label="ChordsFragment" />
 
 </navigation>
