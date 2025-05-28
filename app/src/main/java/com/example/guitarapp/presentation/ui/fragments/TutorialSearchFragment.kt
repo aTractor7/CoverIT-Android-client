@@ -23,26 +23,21 @@ import com.example.guitarapp.presentation.ui.adapters.TutorialShortAdapter
 import com.example.guitarapp.view_model.PersonalLibraryViewModel
 import com.example.guitarapp.utils.Resource
 import com.example.guitarapp.utils.SessionManager
-import com.example.guitarapp.view_model.TutorialSearchViewModel
+import com.example.guitarapp.view_model.TutorialViewModel
+import com.example.guitarapp.view_model.factory.PersonalLibraryViewModelFactory
+import com.example.guitarapp.view_model.factory.TutorialViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
 
 class TutorialSearchFragment : Fragment() {
-    private val viewModel: TutorialSearchViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return TutorialSearchViewModel(requireActivity().application) as T
-            }
-        }
+    private val viewModel: TutorialViewModel by viewModels {
+        TutorialViewModelFactory(requireActivity().application)
     }
     private val personalLibraryViewModel: PersonalLibraryViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return PersonalLibraryViewModel(requireActivity().application) as T
-            }
-        }
+        PersonalLibraryViewModelFactory(requireActivity().application)
     }
     private var _binding: FragmentTutorialSearchBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var adapter: TutorialShortAdapter
     private lateinit var personalLibraryAdapter: TutorialShortAdapter
     private lateinit var popularTutorialsAdapter: TutorialShortAdapter

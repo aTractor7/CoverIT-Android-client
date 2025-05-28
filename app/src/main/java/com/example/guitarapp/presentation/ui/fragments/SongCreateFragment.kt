@@ -24,27 +24,24 @@ import com.example.guitarapp.presentation.ui.adapters.ArtistsSearchAdapter
 import com.example.guitarapp.presentation.ui.adapters.SelectedArtistsAdapter
 import com.example.guitarapp.utils.Resource
 import com.example.guitarapp.view_model.ArtistViewModel
+import com.example.guitarapp.view_model.CommentViewModel
+import com.example.guitarapp.view_model.PersonalLibraryViewModel
 import com.example.guitarapp.view_model.SongViewModel
+import com.example.guitarapp.view_model.TutorialViewModel
+import com.example.guitarapp.view_model.factory.ArtistViewModelFactory
+import com.example.guitarapp.view_model.factory.SongViewModelFactory
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import kotlinx.coroutines.flow.collectLatest
+import kotlin.getValue
 
 class SongCreateFragment : Fragment() {
     private val viewModel: SongViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return SongViewModel(requireActivity().application) as T
-            }
-        }
+        SongViewModelFactory(requireActivity().application)
     }
-
     private val artistViewModel: ArtistViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return ArtistViewModel(requireActivity().application) as T
-            }
-        }
+        ArtistViewModelFactory(requireActivity().application)
     }
 
     private var _binding: FragmentSongCreateBinding? = null

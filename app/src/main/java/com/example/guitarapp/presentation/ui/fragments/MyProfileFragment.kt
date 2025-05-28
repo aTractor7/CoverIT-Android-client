@@ -10,8 +10,6 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.guitarapp.MainActivity
@@ -20,16 +18,13 @@ import com.example.guitarapp.data.model.UserDto
 import com.example.guitarapp.databinding.FragmentProfileBinding
 import com.example.guitarapp.utils.Resource
 import com.example.guitarapp.view_model.ProfileViewModel
+import com.example.guitarapp.view_model.factory.ProfileViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
 import kotlin.getValue
 
 class MyProfileFragment: Fragment() {
     private val viewModel: ProfileViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return ProfileViewModel(requireActivity().application) as T
-            }
-        }
+        ProfileViewModelFactory(requireActivity().application)
     }
 
     private var _binding: FragmentProfileBinding? = null

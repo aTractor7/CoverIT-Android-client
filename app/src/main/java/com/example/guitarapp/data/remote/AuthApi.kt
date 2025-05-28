@@ -18,5 +18,5 @@ interface AuthApi {
     @POST("/auth/registration")
     suspend fun register(
         @Body registerRequest: RegisterRequest
-    ): Response<Unit>//TODO: тут повертається userAuthDto
+    ): Response<RegisterRequest>
 }

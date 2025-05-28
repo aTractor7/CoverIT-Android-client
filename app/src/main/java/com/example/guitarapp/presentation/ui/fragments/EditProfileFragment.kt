@@ -16,20 +16,17 @@ import com.example.guitarapp.data.model.UserDto
 import com.example.guitarapp.databinding.FragmentProfileEditBinding
 import com.example.guitarapp.view_model.ProfileViewModel
 import com.example.guitarapp.utils.Resource
+import com.example.guitarapp.view_model.factory.ProfileViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
+import kotlin.getValue
 
 class EditProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileEditBinding
     private var originalUser: UserDto? = null
 
     private val viewModel: ProfileViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return ProfileViewModel(requireActivity().application) as T
-            }
-        }
+        ProfileViewModelFactory(requireActivity().application)
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {

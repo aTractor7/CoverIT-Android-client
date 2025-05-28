@@ -16,15 +16,13 @@ import com.example.guitarapp.data.model.Artist
 import com.example.guitarapp.databinding.FragmentArtistCreateBinding
 import com.example.guitarapp.utils.Resource
 import com.example.guitarapp.view_model.ArtistViewModel
+import com.example.guitarapp.view_model.factory.ArtistViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
 
 class ArtistCreateFragment : Fragment() {
+
     private val viewModel: ArtistViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return ArtistViewModel(requireActivity().application) as T
-            }
-        }
+        ArtistViewModelFactory(requireActivity().application)
     }
 
     private var _binding: FragmentArtistCreateBinding? = null

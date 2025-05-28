@@ -32,35 +32,27 @@ import com.example.guitarapp.presentation.ui.adapters.SongSearchAdapter
 import com.example.guitarapp.view_model.SongViewModel
 import com.example.guitarapp.view_model.TutorialViewModel
 import com.example.guitarapp.utils.Resource
+import com.example.guitarapp.view_model.CommentViewModel
+import com.example.guitarapp.view_model.PersonalLibraryViewModel
+import com.example.guitarapp.view_model.factory.ChordViewModelFactory
+import com.example.guitarapp.view_model.factory.SongViewModelFactory
+import com.example.guitarapp.view_model.factory.TutorialViewModelFactory
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
 import kotlinx.coroutines.flow.collectLatest
 import kotlin.String
+import kotlin.getValue
 
 class CreateTutorialFragment : Fragment() {
     private val tutorialViewModel: TutorialViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return TutorialViewModel(requireActivity().application) as T
-            }
-        }
+        TutorialViewModelFactory(requireActivity().application)
     }
-
     private val songViewModel: SongViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return SongViewModel(requireActivity().application) as T
-            }
-        }
+        SongViewModelFactory(requireActivity().application)
     }
-
     private val chordViewModel: ChordViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return ChordViewModel(requireActivity().application) as T
-            }
-        }
+        ChordViewModelFactory(requireActivity().application)
     }
 
     private var _binding: FragmentTutorialCreateBinding? = null

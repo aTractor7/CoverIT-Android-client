@@ -2,6 +2,8 @@ package com.example.guitarapp.view_model
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.guitarapp.data.model.UserDto
 import com.example.guitarapp.data.remote.RetrofitInstanceWithToken
@@ -26,71 +28,31 @@ class ProfileViewModel(application: Application) :  AndroidViewModel(application
 
     fun fetchUserProfile(userId: Int) {
         viewModelScope.launch {
-            _profileState.value = Resource.Loading
-            try {
-                val response = userApi.getUserProfile(userId)
-                if (response.isSuccessful && response.body() != null) {
-                    var userDto: UserDto = response.body()!!
-
-                    _profileState.value = Resource.Success(userDto)
-                } else {
-                    _profileState.value = Resource.Error("Failed to fetch profile")
-                }
-            } catch (e: SocketTimeoutException) {
-                _profileState.value = Resource.Error("Connection timeout")
-            } catch (e: IOException) {
-                _profileState.value = Resource.Error("Network unavailable")
-            } catch (e: Exception) {
-                _profileState.value = Resource.Error("Error: ${e.localizedMessage}")
-            }
+            handleApiCall(
+                stateFlow = _profileState,
+                apiCall = { userApi.getUserProfile(userId) },
+                errorMessage = "Failed to fetch profile"
+            )
         }
     }
 
     fun fetchAuthenticatedUserProfile() {
         viewModelScope.launch {
-            _profileState.value = Resource.Loading
-            try {
-                val response = userApi.getAuthenticatedUser()
-                if (response.isSuccessful && response.body() != null) {
-                    var userDto: UserDto = response.body()!!
-
-                    _profileState.value = Resource.Success(userDto)
-                } else {
-                    _profileState.value = Resource.Error("Failed to fetch profile")
-                }
-            } catch (e: MalformedJsonException) {
-                _profileState.value = Resource.NotAuthenticated
-            } catch (e: SocketTimeoutException) {
-                _profileState.value = Resource.Error("Connection timeout")
-            } catch (e: IOException) {
-                _profileState.value = Resource.Error("Network unavailable")
-            } catch (e: Exception) {
-                _profileState.value = Resource.Error("Error: ${e.localizedMessage}")
-            }
+            handleApiCall(
+                stateFlow = _profileState,
+                apiCall = { userApi.getAuthenticatedUser() },
+                errorMessage = "Failed to fetch profile"
+            )
         }
     }
 
     fun updateUserProfile(id: Int, userDto: UserDto) {
         viewModelScope.launch {
-            _profileState.value = Resource.Loading
-            try {
-                val response = userApi.updateUserProfile(id, userDto)
-                if (response.isSuccessful && response.body() != null) {
-                    var userDto: UserDto = response.body()!!
-
-                    _profileState.value = Resource.Success(userDto)
-                } else {
-                    _profileState.value = Resource.Error("Failed to update profile")
-                }
-            } catch (e: MalformedJsonException) {
-                _profileState.value = Resource.NotAuthenticated
-            } catch (e: SocketTimeoutException) {
-                _profileState.value = Resource.Error("Connection timeout")
-            } catch (e: IOException) {
-                _profileState.value = Resource.Error("Network unavailable")
-            } catch (e: Exception) {
-                _profileState.value = Resource.Error("Error: ${e.localizedMessage}")
-            }
+            handleApiCall(
+                stateFlow = _profileState,
+                apiCall = { userApi.updateUserProfile(id, userDto) },
+                errorMessage = "Failed to update profile"
+            )
         }
     }
 }

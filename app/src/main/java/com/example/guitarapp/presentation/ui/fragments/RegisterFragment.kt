@@ -12,15 +12,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.guitarapp.R
+import com.example.guitarapp.data.model.RegisterRequest
 import com.example.guitarapp.databinding.FragmentRegisterBinding
 import com.example.guitarapp.utils.Resource
-import com.example.guitarapp.view_model.RegisterViewModel
+import com.example.guitarapp.view_model.AuthViewModel
 import kotlinx.coroutines.flow.collectLatest
 import java.util.Locale
 
 class RegisterFragment : Fragment() {
 
-    private val viewModel: RegisterViewModel by viewModels()
+    private val viewModel: AuthViewModel by viewModels()
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
@@ -44,7 +45,14 @@ class RegisterFragment : Fragment() {
             val instrument = binding.etInstrument.text.toString()
             val bio = binding.etBio.text.toString()
 
-            viewModel.register(username, email, password, skillLevel, instrument, bio)
+            viewModel.register(RegisterRequest(
+                username = username,
+                email = email,
+                password = password,
+                skill = skillLevel,
+                instrument = instrument,
+                bio = bio
+            ))
         }
 
         lifecycleScope.launchWhenStarted {

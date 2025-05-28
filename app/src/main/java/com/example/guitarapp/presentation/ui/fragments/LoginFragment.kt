@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.guitarapp.R
@@ -17,22 +15,19 @@ import com.example.guitarapp.databinding.FragmentLoginBinding
 import com.example.guitarapp.presentation.ui.BaseActivity
 import com.example.guitarapp.utils.Resource
 import com.example.guitarapp.utils.SessionManager
-import com.example.guitarapp.view_model.LoginViewModel
+import com.example.guitarapp.view_model.AuthViewModel
 import com.example.guitarapp.view_model.ProfileViewModel
+import com.example.guitarapp.view_model.factory.ProfileViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
+import kotlin.getValue
 
 class LoginFragment : Fragment() {
 
-    //TODO: Правильно булоб зробить окрему актівіті для логіну
-
-    private val viewModel: LoginViewModel by viewModels()
+    private val viewModel: AuthViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return ProfileViewModel(requireActivity().application) as T
-            }
-        }
+        ProfileViewModelFactory(requireActivity().application)
     }
+
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 

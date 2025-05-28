@@ -27,15 +27,15 @@ import com.example.guitarapp.databinding.FragmentChordsBinding
 import com.example.guitarapp.utils.Constants
 import com.example.guitarapp.utils.Resource
 import com.example.guitarapp.view_model.ChordViewModel
+import com.example.guitarapp.view_model.CommentViewModel
+import com.example.guitarapp.view_model.PersonalLibraryViewModel
+import com.example.guitarapp.view_model.factory.ChordViewModelFactory
 import kotlinx.coroutines.flow.collectLatest
 
 class ChordsFragment : Fragment() {
+
     private val chordViewModel: ChordViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return ChordViewModel(requireActivity().application) as T
-            }
-        }
+        ChordViewModelFactory(requireActivity().application)
     }
 
     private var _binding: FragmentChordsBinding? = null

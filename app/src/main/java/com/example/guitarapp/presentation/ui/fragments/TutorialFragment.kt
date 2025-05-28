@@ -42,30 +42,23 @@ import com.example.guitarapp.view_model.PersonalLibraryViewModel
 import com.example.guitarapp.utils.Constants
 import com.example.guitarapp.utils.SessionManager
 import com.example.guitarapp.view_model.TutorialViewModel
+import com.example.guitarapp.view_model.factory.CommentViewModelFactory
+import com.example.guitarapp.view_model.factory.PersonalLibraryViewModelFactory
+import com.example.guitarapp.view_model.factory.TutorialViewModelFactory
 
 
+//TODO: not update like after dislike
 class TutorialFragment : Fragment(){
     private val viewModel: TutorialViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return TutorialViewModel(requireActivity().application) as T
-            }
-        }
+        TutorialViewModelFactory(requireActivity().application)
     }
     private val commentViewModel: CommentViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return CommentViewModel(requireActivity().application) as T
-            }
-        }
+        CommentViewModelFactory(requireActivity().application)
     }
     private val personalLibraryViewModel: PersonalLibraryViewModel by viewModels {
-        object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return PersonalLibraryViewModel(requireActivity().application) as T
-            }
-        }
+        PersonalLibraryViewModelFactory(requireActivity().application)
     }
+
     companion object {
         private const val ARG_TUTORIAL_ID = "tutorialId"
 
@@ -191,7 +184,7 @@ class TutorialFragment : Fragment(){
         btnRemoveFromLibrary.setOnClickListener {
             currentTutorial?.id?.let { tutorialId ->
                 personalLibraryViewModel.deletePersonalLibrary(tutorialId)
-                observeLibraryState()
+                observeLibraryDeleteState()
             }
         }
 
@@ -277,6 +270,25 @@ class TutorialFragment : Fragment(){
                     is Resource.Success -> {
                         val tutorialId = arguments?.getInt(ARG_TUTORIAL_ID, -1) ?: -1
                         isInLibrary = state.data.any { it.songTutorial.id == tutorialId }
+                        updateLibraryButtons()
+                    }
+                    is Resource.NotAuthenticated -> handleAuthenticationError()
+                    is Resource.Error -> showError(state.message)
+                    else -> {}
+                }
+            }
+        }
+    }
+
+    private fun observeLibraryDeleteState() {
+        lifecycleScope.launchWhenStarted {
+            personalLibraryViewModel.personalLibraryDeleteState.collectLatest { state ->
+                when (state) {
+                    is Resource.Loading -> {
+                        // Show loading if needed
+                    }
+                    is Resource.Success -> {
+                        isInLibrary = false
                         updateLibraryButtons()
                     }
                     is Resource.NotAuthenticated -> handleAuthenticationError()
