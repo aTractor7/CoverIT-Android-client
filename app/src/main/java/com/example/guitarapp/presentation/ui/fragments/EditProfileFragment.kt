@@ -116,12 +116,12 @@ class EditProfileFragment : Fragment() {
     private fun showUpdateError(message: String?) {
         showLoading(false)
         binding.tvError.visibility = View.VISIBLE
-        binding.tvError.text = message ?: getString(R.string.unknown_error)
+        binding.tvError.text = message ?: getString(R.string.error_unknown)
     }
 
     private fun handleAuthenticationError() {
         startLoginActivity()
-        Toast.makeText(requireContext(), getString(R.string.session_expired), Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), getString(R.string.error_session_expired), Toast.LENGTH_LONG).show()
     }
 
     private fun startLoginActivity(){

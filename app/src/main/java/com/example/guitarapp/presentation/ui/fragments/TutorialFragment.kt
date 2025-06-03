@@ -14,8 +14,6 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.guitarapp.MainActivity
@@ -46,8 +44,6 @@ import com.example.guitarapp.view_model.factory.CommentViewModelFactory
 import com.example.guitarapp.view_model.factory.PersonalLibraryViewModelFactory
 import com.example.guitarapp.view_model.factory.TutorialViewModelFactory
 
-
-//TODO: not update like after dislike
 class TutorialFragment : Fragment(){
     private val viewModel: TutorialViewModel by viewModels {
         TutorialViewModelFactory(requireActivity().application)
@@ -422,11 +418,11 @@ class TutorialFragment : Fragment(){
 
     private fun handleAuthenticationError() {
         startLoginActivity()
-        Toast.makeText(requireContext(), getString(R.string.session_expired), Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), getString(R.string.error_session_expired), Toast.LENGTH_LONG).show()
     }
 
     private fun showError(message: String?) {
-        Toast.makeText(requireContext(), message ?: getString(R.string.unknown_error), Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), message ?: getString(R.string.error_unknown), Toast.LENGTH_SHORT).show()
     }
 
 

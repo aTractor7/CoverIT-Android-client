@@ -229,7 +229,7 @@ class SongCreateFragment : Fragment() {
         startLoginActivity()
         Toast.makeText(
             requireContext(),
-            getString(R.string.session_expired),
+            getString(R.string.error_session_expired),
             Toast.LENGTH_LONG
         ).show()
 
@@ -239,7 +239,7 @@ class SongCreateFragment : Fragment() {
         showLoading(false)
         Toast.makeText(
             requireContext(),
-            message ?: getString(R.string.unknown_error),
+            message ?: getString(R.string.error_unknown),
             Toast.LENGTH_SHORT
         ).show()
     }

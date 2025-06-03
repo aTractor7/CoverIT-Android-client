@@ -171,11 +171,11 @@ class ChordsFragment : Fragment() {
 
     private fun handleAuthenticationError() {
         startLoginActivity()
-        Toast.makeText(requireContext(), getString(R.string.session_expired), Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), getString(R.string.error_session_expired), Toast.LENGTH_LONG).show()
     }
 
     private fun showError(message: String?) {
-        Toast.makeText(requireContext(), message ?: getString(R.string.unknown_error), Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), message ?: getString(R.string.error_unknown), Toast.LENGTH_SHORT).show()
     }
 
     private fun updateNavigationButtons(currentIndex: Int, totalCount: Int) {

@@ -1,38 +1,37 @@
 <resources>
     <string name="app_name">CoverIT</string>
+    <string name="username_label">Username</string>
+    <string name="password_label">Password</string>
+    <string name="email_label">Email</string>
+    <string name="instrument_label">Instrument</string>
+    <string name="bio_label">Bio</string>
+    <string name="skill_label">Skill</string>
+    <string name="skill_beginner">Beginner</string>
+    <string name="skill_advanced">Advanced</string>
+    <string name="role_label">Role</string>
+    <string name="profile_img_description">Profile Image</string>
+
+    <string name="log_in">Log In</string>
     <string name="create_button">Create</string>
     <string name="update_button">Update</string>
+    <string name="search">Search</string>
     <string name="edit">Edit</string>
+    <string name="back">Back</string>
 
-    <string name="login_username_hint">Username</string>
-    <string name="login_password_hint">Password</string>
-    <string name="login_create_account">Create</string>
-    <string name="login_log_in">Log In</string>
+    <string name="error_session_expired">Your session has expired</string>
+    <string name="error_unknown">Unknown error occurred</string>
+
     <string name="login_logo_img_description">logo</string>
 
     <string name="register_title">Sign Up</string>
-    <string name="register_username_hint">Username</string>
-    <string name="register_email_hint">Email</string>
-    <string name="register_password_hint">Password</string>
     <string name="register_skill_label">Select your skill</string>
-    <string name="register_instrument_hint">Instrument</string>
-    <string name="register_bio_hint">Short Bio</string>
     <string name="register_button">Create Account</string>
-    <string name="skill_beginner">Beginner</string>
-    <string name="skill_advanced">Advanced</string>
 
     <string name="profile_label">Profile</string>
-    <string name="profile_img_description">Profile Image</string>
-    <string name="profile_username_label">Username</string>
-    <string name="profile_email_label">Email</string>
-    <string name="profile_role_label">Role</string>
-    <string name="profile_skill_label">Skill</string>
-    <string name="profile_instrument_label">Instrument</string>
-    <string name="profile_bio_label">BIO</string>
+
     <string name="profile_join_since">Join since</string>
     <string name="profile_edit">Edit profile</string>
     <string name="profile_edit_fail">Profile update failed</string>
-
 
     <string name="tutorial_description_label">Description: </string>
     <string name="tutorial_strumming_label">Recommended strumming: </string>
@@ -63,8 +62,6 @@
     <string name="artist_name_required">Artist name is required</string>
     <string name="artist_bio_hint">Enter artist biography (optional)</string>
     <string name="artist_created_successfully">Artist created successfully</string>
-    <string name="session_expired">Your session has expired</string>
-    <string name="unknown_error">Unknown error occurred</string>
 
     <string name="create_song_title">Create New Song</string>
     <string name="song_title_label">Song Title</string>
@@ -90,21 +87,19 @@
     <string name="update_tutorial_title">Update Tutorial</string>
     <string name="song_search_label">Choose the song you want to make a tutorial for</string>
     <string name="song_search_hint">Enter song title</string>
-    <string name="search">Search</string>
     <string name="no_song_found">No song found. If you want to add one click here.</string>
     <string name="difficulty_label">Difficulty</string>
-    <string name="difficulty_hint">SIMPLIFIED/ORIGINAL</string>
+    <string name="difficulty_hint" translatable="false">SIMPLIFIED/ORIGINAL</string>
     <string name="description_label">Description (optional)</string>
     <string name="description_hint">Enter tutorial description</string>
-    <string name="backtrack_label">Backtrack URL (optional)</string>
-    <string name="backtrack_hint">Enter backtrack URL</string>
+    <string name="backtrack_label">Backtrack (optional)</string>
+    <string name="backtrack_hint">Add backtrack</string>
     <string name="strumming_label">Recommended strumming (optional)</string>
     <string name="strumming_hint">Enter recommended strumming pattern</string>
     <string name="chord_label">Select all chords that are used in song.</string>
     <string name="chord_search_hint">Enter chord</string>
     <string name="selected_chord_label">Selected Chords</string>
     <string name="no_chords_found">No chords found.</string>
-    <string name="back">Back</string>
     <string name="please_enter_song_name">Enter soon name please</string>
     <string name="please_select_song">Select song please</string>
     <string name="song_search_error">Error during song find</string>
@@ -124,4 +119,12 @@
     <string name="fingering_img_next">next fingering</string>
     <string name="fingering_img_previous">previous fingering</string>
     <string name="chordpedia_label">Chordpedia</string>
+    <string name="add_to_personal_library">Add to Personal Library</string>
+    <string name="romove_from_personal_library">Romove from Personal Library</string>
+    <string name="chord_image">Chord image</string>
+    <string name="close_chord_image" translatable="false">Close chord image</string>
+    <string name="tutorial_search_hint">Search by song name</string>
+    <string name="error_no_chord_selected">No chords selected</string>
+    <string name="select_chord_label">Select Chord</string>
+    <string name="cancel">Cancel</string>
 </resources>

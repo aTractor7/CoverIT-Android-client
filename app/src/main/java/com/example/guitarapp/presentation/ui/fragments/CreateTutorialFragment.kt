@@ -539,7 +539,7 @@ class CreateTutorialFragment : Fragment() {
         startLoginActivity()
         Toast.makeText(
             requireContext(),
-            getString(R.string.session_expired),
+            getString(R.string.error_session_expired),
             Toast.LENGTH_LONG
         ).show()
     }

@@ -96,7 +96,7 @@ class ArtistCreateFragment : Fragment() {
     private fun handleAuthenticationError() {
         Toast.makeText(
             requireContext(),
-            getString(R.string.session_expired),
+            getString(R.string.error_session_expired),
             Toast.LENGTH_LONG
         ).show()
     }
@@ -105,7 +105,7 @@ class ArtistCreateFragment : Fragment() {
         showLoading(false)
         Toast.makeText(
             requireContext(),
-            message ?: getString(R.string.unknown_error),
+            message ?: getString(R.string.error_unknown),
             Toast.LENGTH_SHORT
         ).show()
     }

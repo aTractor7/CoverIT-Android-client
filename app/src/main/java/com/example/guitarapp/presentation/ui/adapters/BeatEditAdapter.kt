@@ -76,7 +76,7 @@ class BeatEditAdapter(
                     notifyItemChanged(position)
                 }
             } else {
-                Toast.makeText(holder.itemView.context, "No chords selected", Toast.LENGTH_SHORT).show()
+                Toast.makeText(holder.itemView.context, R.string.error_no_chord_selected, Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -190,7 +190,7 @@ class BeatEditAdapter(
 
     private fun showChordSelectionDialog(context: Context, beat: SongBeatCreate, onChordSelected: (Chord) -> Unit) {
         val builder = AlertDialog.Builder(context)
-        builder.setTitle("Select Chord")
+        builder.setTitle(R.string.select_chord_label)
 
         val chordsArray = selectedChords.map { it.name }.toTypedArray()
         builder.setItems(chordsArray) { _, which ->
@@ -206,7 +206,7 @@ class BeatEditAdapter(
             notifyItemChanged(beats.indexOf(beat))
         }
 
-        builder.setNegativeButton("Cancel", null)
+        builder.setNegativeButton(R.string.cancel, null)
         builder.show()
     }
 

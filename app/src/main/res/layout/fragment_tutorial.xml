@@ -177,7 +177,7 @@
             android:layout_marginStart="100dp"
             android:layout_marginTop="76dp"
             android:background="@drawable/icon_like"
-            android:contentDescription="Add to Personal Library"
+            android:contentDescription="@string/add_to_personal_library"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.943"
             app:layout_constraintStart_toEndOf="@+id/tvTutorialLabel"
@@ -191,7 +191,7 @@
             android:layout_margin="8dp"
             android:visibility="gone"
             android:background="@drawable/icon_dislike"
-            android:contentDescription="Romove from Personal Library"
+            android:contentDescription="@string/romove_from_personal_library"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.943"
             app:layout_constraintStart_toEndOf="@+id/tvTutorialLabel"
@@ -212,7 +212,7 @@
                 android:layout_height="200dp"
                 android:scaleType="centerInside"
                 android:background="@color/darker3_color"
-                android:contentDescription="Chord image" />
+                android:contentDescription="@string/chord_image" />
 
             <ImageButton
                 android:id="@+id/btnCloseChordImage"
@@ -221,7 +221,7 @@
                 android:layout_gravity="end|top"
                 android:layout_margin="8dp"
                 android:background="@drawable/icon_cancel"
-                android:contentDescription="Close chord image" />
+                android:contentDescription="@string/close_chord_image" />
         </FrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -253,7 +253,7 @@
 
         <EditText
             android:id="@+id/etCommentInput"
-            android:layout_width="275dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:background="@drawable/rounded_searchview"
@@ -271,16 +271,16 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAddComment"
-            android:layout_width="75dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:layout_marginStart="5dp"
+            android:layout_marginTop="12dp"
             android:backgroundTint="@color/darker1_color"
             android:text="@string/tutorial_comments_add_button_text"
             android:textColor="@color/darkest_color"
             app:cornerRadius="15dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/etCommentInput"
             app:layout_constraintTop_toBottomOf="@id/tvCommentsLabel" />
 
